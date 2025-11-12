@@ -311,8 +311,6 @@ export function ProfilePage({ user, posts = [] }: ProfilePageProps) {
             )}
           </div>
         </div>
-
-      
     </div>
   );
 }
