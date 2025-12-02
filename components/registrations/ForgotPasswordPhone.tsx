@@ -19,7 +19,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import clientApi from "@/lib/clientApi";
+import clientApi from "@/apis/clientApi";
 import { toast } from "react-toastify";
 import CountrySelect from "./CountrySelect";
 

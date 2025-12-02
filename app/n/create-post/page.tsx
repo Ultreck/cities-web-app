@@ -1,4 +1,4 @@
-import CreatePost from '@/components/pages/CreatePost'
+import CreatePost from '@/components/Drawers/CreatePostDrawer'
 import React from 'react'
 
 const AddPostPage = () => {

@@ -7,7 +7,7 @@ import { ChevronLeft, Eye, EyeOff, Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import img from "../../assets/images/image 1.png";
 import useFormHook from "@/hooks/use-form-hook";
-import clientApi from "@/lib/clientApi";
+import clientApi from "@/apis/clientApi";
 import { toast } from "react-toastify";
 
 export default function EnterNewPassword() {

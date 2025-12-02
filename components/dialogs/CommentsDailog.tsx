@@ -22,7 +22,7 @@ import { Input } from "../ui/input";
 import { RiSendPlaneFill } from "react-icons/ri";
 import { CommentType, RePostType } from "@/types/type-props";
 import PostMedia from "../PostMedia";
-import clientApi from "@/lib/clientApi";
+import clientApi from "@/apis/clientApi";
 import { FaRegComments } from "react-icons/fa6";
 
 const CommentsDailog = ({
@@ -42,9 +42,9 @@ const CommentsDailog = ({
   const [commentIndex, setCommentIndex] = useState<string | undefined>("");
 
   const handleLike = () => {
-    // const newLikedState = !isLiked;
-    // setIsLiked(newLikedState);
-    // setLikes((prev) => (newLikedState ? prev + 1 : prev - 1));
+    const newLikedState = !isLiked;
+    setIsLiked(newLikedState);
+    setLikes((prev) => (newLikedState ? prev + 1 : prev - 1));
   };
 
   const handleShare = () => {
@@ -59,7 +59,7 @@ const CommentsDailog = ({
     return num.toString();
   };
 
-  const handleChanges = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChanges = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPostComments(e.target.value);
     console.log(e.target.value);
   };
@@ -107,7 +107,7 @@ const CommentsDailog = ({
     fetchPostComments();
   }, [fetchPostComments, postComments]);
 
-  const handleReplyChanges = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleReplyChanges = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setreplyComments(e.target.value);
     console.log(e.target.value);
   };
@@ -121,8 +121,12 @@ const CommentsDailog = ({
     const res = await clientApi.post(`/post/comment/reply`, data);
     console.log(res.data);
     setreplyComments("");
+    setIsReply(!isReply)
     fetchPostComments();
   };
+
+  console.log({commentsDatas});
+  
 
   return (
     <div>
@@ -157,7 +161,7 @@ const CommentsDailog = ({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <CardTitle className="text-base">
-                        {post.User.first_name}
+                        {post?.User?.first_name + " " + post?.User?.last_name}
                       </CardTitle>
                       {/* {post.sponsored && (
                         <Badge variant="secondary" className="text-xs">
@@ -165,8 +169,8 @@ const CommentsDailog = ({
                         </Badge>
                       )} */}
                     </div>
-                    <CardDescription className="flex items-center gap-2">
-                      {post?.User?.first_name + " " + post?.User?.last_name} •{" "}
+                    <CardDescription className="flex items-center gap-2 mb-2">
+                      {post?.User?.user_name} •{" "}
                       {formatPostTime(post.createdAt)}
                     </CardDescription>
                   </div>
@@ -174,7 +178,7 @@ const CommentsDailog = ({
               </div>
               <div>
                 {/* <h3 className="font-semibold mb-2">{post.Post.title}</h3> */}
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground mb-2">
                   {post.Post.content}
                 </p>
               </div>
@@ -239,7 +243,23 @@ const CommentsDailog = ({
               </div>
             </div>
             <ScrollArea className="h-[270px] bg-white w-full rounded-md p-4">
-              <div className="text relative">
+               <div className="bg-gray-100 rounded-3xl px-3 py-2 mb-8 flex items-center justify-between gap-4">
+                      <textarea
+                        value={postComments}
+                        onChange={handleChanges}
+                        placeholder="Add your comment here..."
+                        className="flex-1 bg-transparent text-sm placeholder:text-gray-500 resize-none outline-none min-h-[24px]"
+                        rows={1}
+                      />
+                      <Button
+                        onClick={handlePostComments}
+                        disabled={!postComments.trim()}
+                        className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-6 h-9 whitespace-nowrap shrink-0"
+                      >
+                        Send
+                      </Button>
+                    </div>
+              {/* <div className="text relative">
                 <Input
                   type="text"
                   name="comment"
@@ -255,7 +275,7 @@ const CommentsDailog = ({
                 >
                   <RiSendPlaneFill className="text-white" size={20} />
                 </button>
-              </div>
+              </div> */}
               {commentsDatas.map((co) => (
                 <div key={co.unique_id}>
                   <div className="flex gap-3 my-5 flex-1">
@@ -314,33 +334,49 @@ const CommentsDailog = ({
                           </span>
                         </Button>
                         {isReply && commentIndex === co.unique_id && (
-                          <div className="text relative w-full">
-                            <Input
-                              type="text"
-                              name="reply"
-                              id="reply"
-                              value={replyComments}
-                              className="h-10 "
-                              placeholder="Add your comment here..."
-                              onChange={handleReplyChanges}
-                            />
-                            <button
-                              onClick={() => {
-                                handleReplyComment(co.unique_id, post.post_id);
-                              }}
-                              className="text absolute right-0 top-0 hover:bg-blue-500 flex justify-center items-center h-full w-12 bg-blue-600 rounded-br-lg rounded-tr-lg"
-                            >
-                              <RiSendPlaneFill
-                                className="text-white"
-                                size={20}
-                              />
-                            </button>
-                          </div>
+                          // <div className="text relative w-full">
+                          //   <Input
+                          //     type="text"
+                          //     name="reply"
+                          //     id="reply"
+                          //     value={replyComments}
+                          //     className="h-10 "
+                          //     placeholder="Add your comment here..."
+                          //     onChange={handleReplyChanges}
+                          //   />
+                          //   <button
+                          //     onClick={() => {
+                          //       handleReplyComment(co.unique_id, post.post_id);
+                          //     }}
+                          //     className="text absolute right-0 top-0 hover:bg-blue-500 flex justify-center items-center h-full w-12 bg-blue-600 rounded-br-lg rounded-tr-lg"
+                          //   >
+                          //     <RiSendPlaneFill
+                          //       className="text-white"
+                          //       size={20}
+                          //     />
+                          //   </button>
+                          // </div>
+                             <div className="bg-gray-100 rounded-3xl px-3 py-2 mb-8 flex items-center justify-between gap-4 w-full">
+                      <textarea
+                        value={replyComments}
+                        onChange={handleReplyChanges}
+                        placeholder="Add your comment here..."
+                        className="flex-1 bg-transparent text-sm placeholder:text-gray-500 resize-none outline-none min-h-[24px]"
+                        rows={1}
+                      />
+                      <Button
+                        onClick={()=>handleReplyComment(co.unique_id, post.post_id)}
+                        disabled={!replyComments.trim()}
+                        className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-6 h-9 whitespace-nowrap shrink-0"
+                      >
+                        Reply
+                      </Button>
+                    </div>
                         )}
                       </div>
                     </div>
                   </div>
-                  {/* {co.length > 0 &&
+                  {co.length > 0 &&
                     co.replies.map((rep) => (
                       <div key={rep.id} className="text ml-10">
                         <div className="flex gap-3 my-5 flex-1">
@@ -396,7 +432,7 @@ const CommentsDailog = ({
                             </div>
                           ))}
                       </div>
-                    ))} */}
+                    ))}
                 </div>
               ))}
             </ScrollArea>

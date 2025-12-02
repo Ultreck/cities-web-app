@@ -120,3 +120,42 @@
     @apply bg-background text-foreground;
   }
 }
+
+.custom-scroll {
+  scrollbar-width: none; /* Firefox */
+}
+
+.custom-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0; /* Safari and Chrome */
+}
+
+.mySwiper {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  scrollbar-width: none; 
+}
+
+.mySwiper::-webkit-scrollbar {
+  width: 0;
+  height: 0; /* Safari and Chrome */
+}
+
+.mySwiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mySwiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

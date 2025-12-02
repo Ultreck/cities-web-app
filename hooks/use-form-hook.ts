@@ -1,6 +1,6 @@
 "use client";
 
-import clientApi from "@/lib/clientApi";
+import clientApi from "@/apis/clientApi";
 import { useEffect, useState } from "react";
 
 export type CountryProps = {

@@ -49,7 +49,7 @@ const BottomNav = () => {
     </Link>
   );
   return (
-    <div className="w-full sticky w-full bottom-0 lg:border-r h-full pt-10">
+    <div className="w-full sticky w-full md:hidden bottom-0 lg:border-r h-full pt-10">
       <aside
         className={`
              fixed lg:sticky bottom-0 w-full items-center flex justify-between border-t bg-background z-40

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CommunityHeader } from './CommunityHeader';
 import { MemberCard } from './MemberCard';
+import { useSelector } from 'react-redux';
 
 interface Member {
   id: string;
@@ -50,9 +51,11 @@ const mockMembers: Member[] = [
   },
 ];
 
-export default function CommunityProfile() {
+export default function CommunityProfile({children, setActiveTab, activeTab, community, hasJoined}: {children: React.ReactNode, setActiveTab: React.Dispatch<React.SetStateAction<string>>, activeTab: string, community: any, hasJoined: boolean}) {
   const [isFollowing, setIsFollowing] = useState(false);
   const [followingMembers, setFollowingMembers] = useState<Set<string>>(new Set());
+     const user = useSelector((state: any) => state.user.details);
+ console.log({'User in main component':user});
 
   const handleFollow = () => {
     setIsFollowing(!isFollowing);
@@ -69,17 +72,28 @@ export default function CommunityProfile() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4 bg-white">
       {/* Community Header */}
       <CommunityHeader
-        name="Latin Community"
+        name={`${community?.name} Community`}
         image="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&h=400&fit=crop"
         members={2450}
-        followers={5280}
-        description="A vibrant community dedicated to celebrating Latin culture, traditions, and fostering connections among members."
-        isFollowing={isFollowing}
-        onFollow={handleFollow}
+        views={5000}
+  likes={3000}
+  dislikes={500}
+  comments={1000}
+  setActiveTab={setActiveTab}
+  activeTab={activeTab}
+  hasJoined={hasJoined}
+  community={community}
+        // description="A vibrant community dedicated to celebrating Latin culture, traditions, and fostering connections among members."
+        // isFollowing={isFollowing}
+        // onFollow={handleFollow}
       />
+
+      <div className=''>
+        {children}
+      </div>
 
       {/* Tabs */}
       <Tabs defaultValue="members" className="w-full">
@@ -97,14 +111,24 @@ export default function CommunityProfile() {
               View All ({mockMembers.length})
             </Button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {mockMembers.map((member) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* {mockMembers.map((member) => (
               <MemberCard
                 key={member.id}
                 {...member}
                 isFollowing={followingMembers.has(member.id)}
                 onFollow={() => handleMemberFollow(member.id)}
                 onMessage={() => console.log('Message', member.name)}
+              />
+            ))} */}
+            {community?.users.map((member) => (
+              <MemberCard
+                key={member.unique_id}
+                {...member}
+                isFollowing={followingMembers.has(member.unique_id)}
+                onFollow={() => handleMemberFollow(member.unique_id)}
+                onMessage={() => console.log('Message', member.name)}
+                isLoggedInUser={user?.unique_id===member.unique_id}
               />
             ))}
           </div>

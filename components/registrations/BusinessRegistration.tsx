@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import img from "../../assets/images/image 2.png";
 
-import clientApi from "@/lib/clientApi";
+import clientApi from "@/apis/clientApi";
 import { businessFormSchema } from "@/lib/formSchemas";
 import useParamHook from "@/hooks/use-param-hook";
 import { ChevronLeft, Loader } from "lucide-react";

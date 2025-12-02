@@ -19,7 +19,7 @@ import {
 import useParamHook from "@/hooks/use-param-hook";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import clientApi from "@/lib/clientApi";
+import clientApi from "@/apis/clientApi";
 import { toast } from "react-toastify";
 import CountrySelect from "./CountrySelect";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";

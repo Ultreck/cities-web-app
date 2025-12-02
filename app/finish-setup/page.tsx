@@ -1,11 +1,12 @@
 import FinishSetup from '@/components/registrations/FinishSetup'
 import React from 'react'
+import AuthPageWrapper from '@/components/auth/AuthPageWrapper'
 
 const FinishedSetupPage = () => {
   return (
-    <div>
+    <AuthPageWrapper>
         <FinishSetup/>
-    </div>
+    </AuthPageWrapper>
   )
 }
 

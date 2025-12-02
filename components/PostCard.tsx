@@ -13,6 +13,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   ThumbsUp,
   Eye,
+  MessageCircle,
+  Share2,
+  Heart,
 } from "lucide-react";
 import { StaticImageData } from "next/image";
 import { HiOutlineShare } from "react-icons/hi2";
@@ -22,6 +25,7 @@ import RepostDialog from "./dialogs/RepostDialog";
 import Link from "next/link";
 import { RePostType } from "@/types/type-props";
 import PostMedia from "./PostMedia";
+import { useRouter } from "next/navigation";
 
 export interface Post {
   id: number;
@@ -51,25 +55,15 @@ interface PostCardProps {
 }
 
 export function PostCard({ post, handlePostLikes, handleRepost }: PostCardProps) {
-  // const [isLiked, setIsLiked] = useState();
-  // const [likes, setLikes] = useState();
+   const router = useRouter();
   const [showComments, setShowComments] = useState(false);
-
-  // const handleLike = () => {
-  //   const newLikedState = !isLiked;
-  //   // setIsLiked(newLikedState);
-  //   // setLikes((prev) => (newLikedState ? prev + 1 : prev - 1));
-  //   // if (onLike) onLike(post.id, newLikedState);
-  // };
 
   const handleComment = () => {
     setShowComments(!showComments);
-    // if (onComment) onComment(post.id);
   };
 
   const handleShare = () => {
     // if (onShare) onShare(post.id);
-    // alert(`Sharing: ${post.title}`);
   };
 
   const formatNumber = (num: number) => {
@@ -78,141 +72,141 @@ export function PostCard({ post, handlePostLikes, handleRepost }: PostCardProps)
     }
     return num.toString();
   };
+  
   function formatPostTime(timestamp: string) {
     const date = new Date(timestamp);
-    return date.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
+    return date.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
     });
   }
+
+
+  const goToProfile = () => {
+    router.push(`/n/profile/${post.User.unique_id}`);
+  }
+  
   return (
-    <Card className="hover:shadow transition-shadow">
-      <CardHeader>
-        <div className="flex items-start justify-between">
-          <div className="flex gap-3 flex-1">
-            <Avatar>
-              <AvatarImage
-                src={post?.User?.profile_pic}
-                alt={post.User.first_name}
-              />
-              <AvatarFallback>
-                {post?.User?.first_name.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <CardTitle className="text-base">
-                  {post?.User?.first_name}
-                </CardTitle>
-                {/* {post.sponsored && (
-                  <Badge variant="secondary" className="text-xs">
-                    Sponsored
-                  </Badge>
-                )} */}
-              </div>
-              <CardDescription className="flex items-center gap-2">
-                {post?.User?.first_name + " " + post?.User?.last_name} •{" "}
-                {formatPostTime(post.createdAt)}
-              </CardDescription>
-            </div>
+    <div className="bg-white border rounded-2xl border-gray-200 p-4 flex gap-4 hover:bg-gray-50 transition-colors">
+      {/* Header */}
+      <div className="relative h-14">
+           <Avatar onClick={goToProfile} className="w-14 h-14 flex-shrink-0 cursor-pointer">
+          <AvatarImage
+            src={post?.User?.profile_pic}
+            alt={post.User.first_name}
+          />
+          <AvatarFallback>
+            {post?.User?.first_name.charAt(0)}
+          </AvatarFallback>
+        </Avatar>
+           <div className="absolute -bottom-1 -right-1 bg-red-500 rounded-full p-1 border-2 border-white cursor-pointer hover:bg-red-600 transition-colors">
+            <span className="text-white text-xs font-bold flex items-center justify-center w-3 h-3">+</span>
+          </div>
+      </div>
+      <div className="flex-1">
+        <div className="mb-3">
+          <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-1 flex-wrap">
+              <span className="font-bold text-gray-900">
+              {post?.User?.first_name}
+            </span>
+            <span className="text-gray-500">
+              @{post?.User?.user_name || "username"}
+            </span>
+          </div>
+            <span className="text-gray-500 text-sm">
+              {formatPostTime(post.createdAt)}
+            </span>
           </div>
         </div>
-      </CardHeader>
 
-      <CardContent className="space-y-2">
-        <div>
-          {/* <h3 className="font-semibold mb-2">{post.Post.title}</h3> */}
-          <p className="text-sm text-muted-foreground">{post.Post.content}</p>
-        </div>
+      {/* Content */}
+      <div className="mb-3">
+        <p className="text-gray-900 text-base leading-normal">{post.Post.content}</p>
+      </div>
 
-        {post.Post.Media.length > 0 && (
+      {/* Media */}
+      {post.Post.Media.length > 0 && (
+        <div className="mb-3 rounded-2xl overflow-hidden border border-gray-200">
           <PostMedia mediaItems={post.Post.Media} />
-        )}
-
-        <div className="text flex items-center justify-between pt-2 border-t">
-          <CommentsDailog post={post}>
-            <Link
-              href={`#`}
-              className="flex items-center gap-1 text-blue-600 hover:underline"
-            >
-              <span className="hidden sm:inline">
-                {formatNumber(post.Post.commentcount)}
-              </span>
-              <span className="hidden sm:inline">Comments</span>
-            </Link>
-          </CommentsDailog>
-          <Link
-            href={`/n/${post.post_id}/post-engagement?type=likes`}
-            className="flex items-center gap-1 text-blue-600 hover:underline"
-          >
-            <span className="">{formatNumber(post.Post.reactionscount)}</span>
-            <span className="hidden sm:inline">Likes</span>
-          </Link>
-          <Link
-            href={`#`}
-            className="flex items-center gap-1 text-blue-600 hover:underline"
-          >
-            <span className="">{formatNumber(post.Post.rePostCount)}</span>
-            <span className="hidden sm:inline">Shares</span>
-          </Link>
-          <Link
-            href={`/n/${post.post_id}/post-engagement?type=views`}
-            className="flex items-center gap-1 text-blue-600 hover:underline"
-          >
-            <span className="">{formatNumber(post.Post.views)}</span>
-            <span className="hidden sm:inline">Views</span>
-          </Link>
         </div>
-        <div className="flex items-center justify-between pt-4 border-t">
-          <CommentsDailog post={post}>
-            <p className="text">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="flex items-center gap-2"
-                onClick={handleComment}
-              >
-                <AiOutlineComment className="w-4 h-4" />
-                <span className="hidden sm:inline">Comments</span>
-              </Button>
-            </p>
-          </CommentsDailog>
-          <Button
-            variant={post.Post.isLike ? "default" : "ghost"}
-            size="sm"
-            className="flex items-center gap-2 transition-all"
-            onClick={() => handlePostLikes && handlePostLikes(post.post_id)}
-          >
-            <ThumbsUp className={`w-4 h-4 ${post.Post.isLike ? "fill-current" : ""}`} />
-            <span className="hidden sm:inline">Likes</span>
-          </Button>
+      )}
 
-          <RepostDialog id={post.post_id} onRepost={handleRepost} >
-            <Button
-              variant="ghost"
-              size="sm"
-              className="flex items-center gap-2"
-              onClick={handleShare}
-            >
-              <HiOutlineShare className="w-4 h-4" />
-              <span className="hidden sm:inline">Shares</span>
-            </Button>
-          </RepostDialog>
-
-          <Button  variant={post.Post.isView ? "default" : "ghost"} size="sm" className="flex items-center gap-2">
-            <Eye className="w-4 h-4" />
-            <span className="hidden sm:inline">Views</span>
-          </Button>
-        </div>
-
-        {/* {showComments && (
-          <div className="pt-4 border-t space-y-3">
-            <div className="text-sm text-muted-foreground">
-              Comments section coming soon...
-            </div>
+      {/* Engagement Stats */}
+      <div className="flex items-center gap-4 pt-3 border-b border-gray-200 pb-3 text-gray-500 text-sm">
+        <CommentsDailog post={post}>
+          <div className="flex items-center gap-2 hover:text-blue-500 cursor-pointer">
+            <MessageCircle className="w-4 h-4" />
+            <span>{formatNumber(post.Post.commentcount)}</span>
           </div>
-        )} */}
-      </CardContent>
-    </Card>
+        </CommentsDailog>
+        
+        <Link
+          href={`#`}
+          className="flex items-center gap-2 hover:text-green-500"
+        >
+          <Share2 className="w-4 h-4" />
+          <span>{formatNumber(post.Post.rePostCount)}</span>
+        </Link>
+        
+        <Link
+          href={`/n/${post.post_id}/post-engagement?type=likes`}
+          className="flex items-center gap-2 hover:text-red-500"
+        >
+          <Heart className="w-4 h-4" />
+          <span>{formatNumber(post.Post.reactionscount)}</span>
+        </Link>
+        
+        <Link
+          href={`/n/${post.post_id}/post-engagement?type=views`}
+          className="flex items-center gap-2 hover:text-blue-500"
+        >
+          <Eye className="w-4 h-4" />
+          <span>{formatNumber(post.Post.views)}</span>
+        </Link>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex items-center justify-between mt-3 text-gray-500">
+        <CommentsDailog post={post}>
+          <button 
+            className="flex items-center gap-2 group hover:text-blue-500"
+            onClick={handleComment}
+          >
+            <div className="flex items-center justify-center w-8 h-8 rounded-full group-hover:bg-blue-100">
+              <MessageCircle className="w-4 h-4" />
+            </div>
+          </button>
+        </CommentsDailog>
+        
+        <RepostDialog id={post.post_id} onRepost={handleRepost}>
+          <button 
+            className="flex items-center gap-2 group hover:text-green-500"
+            onClick={handleShare}
+          >
+            <div className="flex items-center justify-center w-8 h-8 rounded-full group-hover:bg-green-100">
+              <Share2 className="w-4 h-4" />
+            </div>
+          </button>
+        </RepostDialog>
+        
+        <button
+          className="flex items-center gap-2 group hover:text-red-500"
+          onClick={() => handlePostLikes && handlePostLikes(post.post_id)}
+        >
+          <div className="flex items-center justify-center w-8 h-8 rounded-full group-hover:bg-red-100">
+            <Heart className={`w-4 h-4 ${post.Post.isLike ? "fill-red-500 text-red-500" : ""}`} />
+          </div>
+        </button>
+        
+        <button className="flex items-center gap-2 group hover:text-blue-500">
+          <div className="flex items-center justify-center w-8 h-8 rounded-full group-hover:bg-blue-100">
+            <Eye className="w-4 h-4" />
+          </div>
+        </button>
+      </div>
+      </div>
+    </div>
   );
 }

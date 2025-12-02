@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { ChevronLeft, Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
-import clientApi from "@/lib/clientApi";
+import clientApi from "@/apis/clientApi";
 import useFormHook from "@/hooks/use-form-hook";
 import { toast } from "react-toastify";
 

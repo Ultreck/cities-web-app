@@ -2,10 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type UserState = {
   details: Record<string, any> | null;
+  isLoading: boolean;
 };
 
 const initialState: UserState = {
   details: null,
+  isLoading: false,
 };
 
 const userSlice = createSlice({
@@ -23,8 +25,11 @@ const userSlice = createSlice({
     clearUser: (state) => {
       state.details = null;
     },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
+    },
   },
 });
 
-export const { setUser, clearUser } = userSlice.actions;
+export const { setUser, clearUser, setLoading } = userSlice.actions;
 export default userSlice.reducer;

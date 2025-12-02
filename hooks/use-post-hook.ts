@@ -1,6 +1,7 @@
 "use client";
 
-import clientApi from "@/lib/clientApi";
+import clientApi from "@/apis/clientApi";
+import { useGetPosts } from "@/apis/postMutation";
 import { RePostType } from "@/types/type-props";
 import { useEffect, useState, useCallback } from "react";
 import { toast } from "react-toastify";
@@ -8,6 +9,7 @@ import { toast } from "react-toastify";
 const usePostHook = () => {
   const [posts, setPosts] = useState<RePostType[]>([]);
   const [trigger, setTrigger] = useState(false);
+  const {data, isLoading:isFetchingPosts} = useGetPosts()
 
   const fetchPosts = useCallback(async () => {
     try {
@@ -19,7 +21,10 @@ const usePostHook = () => {
   }, []);
 
   useEffect(() => {
-    fetchPosts();
+    // fetchPosts();
+    if (data?.data) {
+      setPosts(data.data);
+    }
     // const response = clientApi.get(`/post/`);
     // response
     //   .then((res) => {
@@ -30,7 +35,7 @@ const usePostHook = () => {
     //   .catch((err) => {
     //     console.log(err);
     //   });
-  }, []);
+  }, [data]);
 
   const handleRepost = async (id: string, aud: string) => {
     const data = {
@@ -92,6 +97,7 @@ const usePostHook = () => {
     handlePostLikes,
     posts,
     // refetch: fetchPosts,
+    isFetchingPosts,
     handleRepost,
   };
 };

@@ -35,7 +35,7 @@ export interface Community {
 }
 
 export interface Post {
-  id: string;
+  unique_id: string;
   image: string;
   likes?: number;
   comments?: number;
@@ -45,7 +45,7 @@ export interface CommunityCard {
   id: string;
   name: string;
   description: string;
-  members: string[];
+  users: Record<string, any>[];
   conversationCount: number;
 }
 

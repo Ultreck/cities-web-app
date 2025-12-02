@@ -20,7 +20,7 @@ import {
 } from "../ui/form";
 import { PiEyeSlashThin, PiEyeThin } from "react-icons/pi";
 import CountrySelect from "./CountrySelect";
-import clientApi from "@/lib/clientApi";
+import clientApi from "@/apis/clientApi";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
@@ -42,9 +42,10 @@ export default function Login() {
   });
 
   const onSubmit = async (data: UserLoginProps) => {
+    console.log("Login data:", {...data, phone_number: Number(data.phone_number)});
     try {
       setLoading(true);
-      const res = await clientApi.post(`/user/login/`, data);
+      const res = await clientApi.post(`/user/login/`, {...data, phone_number: Number(data.phone_number)});
 
       console.log(res);
       const token = res.data.token;
