@@ -409,11 +409,11 @@ useEffect(() => {
           </div>
 
           {/* Right Column with Transparent Image */}
-          <div className="relative h-screen overflow-hidden bg-red-500">
+          <div className="relative h-screen overflow-hidden">
               <img
                 src={userImage.src}
                 alt="Community connection illustration"
-                className="w-full !h-full object-contain"
+                className="w-full object-contain"
               />
                                 <div
                     className={`absolute inset-0 transition-all duration-500 ease-out`}

@@ -9,7 +9,7 @@ export const useAuth = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
-  const { details: user, isLoading } = useSelector((state: any) => state.user);
+  const { details: user, isLoading } = useSelector(() => state.user);
 
   // Logout function that can be used anywhere
   const logout = () => {
@@ -64,7 +64,7 @@ export const useAuth = () => {
 export const useRequireAuth = (redirectPath = '/login') => {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, isLoading } = useSelector((state: any) => state.user);
+  const { user, isLoading } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (!isLoading && !user) {

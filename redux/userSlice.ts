@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type UserState = {
-  details: Record<string, any> | null;
+  details: {[key:string]:number|string|boolean|null} | null;
   isLoading: boolean;
 };
 
@@ -17,7 +17,7 @@ const userSlice = createSlice({
     setUser: (
       state,
       action: PayloadAction<{
-        details: any;
+        details: {[key:string]:number|string|boolean|null};
       }>
     ) => {
       state.details = action.payload.details;
