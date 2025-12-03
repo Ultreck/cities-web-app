@@ -24,7 +24,7 @@ type VisibilityType = "public" | "private" | "friends";
 
 export default function CreatePostDrawer({open, setOpen}:{open:boolean,setOpen: (open:boolean)=>void}) {
   const router = useRouter();
-  const user = useSelector((state: any) => state.user.details);
+  const user = useSelector((state: Record<string, any>) => state.user.details);
   const [content, setContent] = useState("");
   const [visibility, setVisibility] = useState<VisibilityType>("public");
   const [previewImages, setPreviewImages] = useState<string[]>([]);

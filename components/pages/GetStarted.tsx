@@ -304,7 +304,9 @@ import { Button } from '@/components/ui/button';
 import { Apple, Play, Mail, ArrowLeft, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 // import userImage from '../../assets/images/phones.png';
-import userImage from '../../assets/images/slide 1.jpg';
+import one from '../../assets/images/slide 1.jpeg';
+import two from '../../assets/images/slide 2.jpeg';
+import three from '../../assets/images/slide 3.jpeg';
 import playstore from '../../assets/images/play_store.webp';
 import applestore from '../../assets/images/apple_store.webp';
 import 'animate.css';
@@ -312,11 +314,35 @@ import AuthPageWrapper from '../auth/AuthPageWrapper';
 
 
 export const GetStarted: React.FC = () => {
-    const textArray = ["Counties", "Cities", "Communities"];
+    const textArray = ["3000 Counties", "2 million Cities", "50 million users"];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [animate, setAnimate] = useState(false);
   const swiperRef = useRef(null); // Reference to Swiper instance
   const intervalDelay = 5000; 
+    const [activeSlide, setActiveSlide] = useState(0);
+
+  const slides = [
+    {
+      title: 'Connect with your city',
+      image: one.src,
+    },
+    {
+      title: 'Share your moments',
+      image: two.src,
+    },
+    {
+      title: 'Build communities',
+      image: three.src,
+    },
+  ];
+
+  const handleNext = () => {
+    setActiveSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const handlePrev = () => {
+    setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
 
 useEffect(() => {
     const interval = setInterval(() => {
@@ -329,6 +355,7 @@ useEffect(() => {
           }
           return nextIndex;
         });
+        handleNext()
         setAnimate(true); // Restart text animation
       }, 50); // Small delay to reset animation
     }, intervalDelay);
@@ -350,15 +377,15 @@ useEffect(() => {
 
             <div className="space-y-12">
               <div>
-                <h1 className="text-5xl font-bold text-gray-100 mb-8 leading-tight">
+                <h1 className="text-4xl font-bold text-gray-100 mb-8 leading-tight">
                   {/* Connect <span className="text-blue-600">Locally</span> */}
-                  Next Gen AI Social Media App for <span
+                  Next Gen AI powered Social Network App for over <span
          className={` text-slate-500 inline-block text-outline-white-sm ${
           animate ? "animate__animated animate__slideInUp" : ""
         }`}
       >
         {textArray[currentIndex]}
-      </span>
+      </span> in different communities
                 </h1>
                 <p className="text-gray-200 text-lg lg:text-xl max-w-md leading-relaxed">
                   Connect locally, engage meaningfully, and discover your community. Share what matters and build lasting relationships.
@@ -409,7 +436,7 @@ useEffect(() => {
           </div>
 
           {/* Right Column with Transparent Image */}
-          <div className="relative h-screen overflow-hidden">
+          {/* <div className="relative h-screen overflow-hidden">
               <img
                 src={userImage.src}
                 alt="Community connection illustration"
@@ -424,7 +451,141 @@ useEffect(() => {
                 alt="Community connection illustration"
                         className="w-full h-full object-cover opacity-90"
                       />
-                      {/* <div className="absolute inset-0 bg-gradient-to-r from-[#05367f] to-transparent" /> */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-slate-900/50" />
+
+                      <div className="absolute inset-0 flex flex-col justify-between p-6">
+                        <div className="text-right text-white">
+                          <div className="inline-block bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-semibold">
+                            Featured
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+          </div> */}
+                         <div className="relative overflow-hidden">
+            <div className="relative h-full w-full">
+              {slides.map((slide, index) => {
+                const isActive = index === activeSlide;
+                const isNext = index === (activeSlide + 1) % slides.length;
+                const isPrev = index === (activeSlide - 1 + slides.length) % slides.length;
+
+                let position = 'translate-x-full opacity-0';
+                let zIndex = 0;
+
+                if (isActive) {
+                  position = 'translate-x-0 opacity-100';
+                  zIndex = 30;
+                } else if (isNext) {
+                  position = 'translate-x-full opacity-0';
+                  zIndex = 20;
+                } else if (isPrev) {
+                  position = '-translate-x-full opacity-0';
+                  zIndex = 10;
+                }
+
+                return (
+                  <div
+                    key={index}
+                    className={`absolute inset-0 transition-all duration-700 ease-out ${position}`}
+                    style={{ zIndex }}
+                  >
+                    <img
+                      src={slide.image}
+                      alt={slide.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-slate-900/80" />
+                  </div>
+                );
+              })}
+           
+           
+             <div className="flex justify-center items-center gap-8 absolute z-99 w-full bottom-10">
+              <button
+                onClick={handlePrev}
+                className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all flex items-center justify-center text-white"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+                   <div className="flex justify-center gap-2">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveSlide(index)}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    index === activeSlide
+                      ? 'w-8 bg-white'
+                      : 'w-1.5 bg-white/40 hover:bg-white/60'
+                  }`}
+                />
+              ))}
+            </div>
+              <button
+                onClick={handleNext}
+                className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all flex items-center justify-center text-white"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+            </div>
+        </div>
+        </div>
+      </div>
+
+      {/* Mobile Layout */}
+      <div className="md:hidden overflow-x-hidden flex flex-col min-h-screen">
+        <div className="flex-1 flex flex-col px-6 py-8">
+          {/* Header */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold mb-1">C Cities App</h2>
+            <p className="text-slate-400 text-sm">AI social network for counties</p>
+          </div>
+
+          {/* Image Section */}
+         {/* <img
+                src={userImage.src}
+                alt="Community connection illustration"
+                className="w-full h-full object-contain"
+              /> */}
+               <div className="w-full max-w-lg mx-auto relative">
+            <div className="relative h-96 mb-8 perspective">
+                        {slides.map((slide, index) => {
+                const isActive = index === activeSlide;
+                const isNext = index === (activeSlide + 1) % slides.length;
+                const isPrev = index === (activeSlide - 1 + slides.length) % slides.length;
+
+                let position = 'translate-x-full opacity-0';
+                let zIndex = 0;
+
+                if (isActive) {
+                  position = 'translate-x-0 opacity-100';
+                  zIndex = 30;
+                } else if (isNext) {
+                  position = 'translate-x-full opacity-0';
+                  zIndex = 20;
+                } else if (isPrev) {
+                  position = '-translate-x-full opacity-0';
+                  zIndex = 10;
+                }
+
+                return (
+                  <div
+                    key={index}
+                    className={`absolute inset-0 transition-all duration-500 ease-out ${position}`}
+                    style={{ zIndex }}
+                  >
+                    <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-blue-400 to-blue-600">
+                      <img
+                        src={slide.image}
+                        alt={slide.title}
+                        className="w-full h-full object-cover opacity-90"
+                      />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-slate-900/50" />
 
                       <div className="absolute inset-0 flex flex-col justify-between p-6">
@@ -434,46 +595,65 @@ useEffect(() => {
                           </div>
                         </div>
 
-                        {/* <div>
-                          <h3 className="text-white text-3xl font-bold mb-4">Something</h3>
+                        <div>
+                          <h3 className="text-white text-3xl font-bold mb-4">{slide.title}</h3>
                           <p className="text-blue-100 text-sm max-w-xs">
                             Connect with people in your area and discover local events and communities.
                           </p>
-                        </div> */}
+                        </div>
                       </div>
                     </div>
                   </div>
-          </div>
+                );
+              })}
+           
+           
+             <div className="flex justify-center items-center gap-8 absolute z-99 w-full bottom-10">
+              <button
+                onClick={handlePrev}
+                className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all flex items-center justify-center text-white"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+                   <div className="flex justify-center gap-2">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveSlide(index)}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    index === activeSlide
+                      ? 'w-8 bg-white'
+                      : 'w-1.5 bg-white/40 hover:bg-white/60'
+                  }`}
+                />
+              ))}
+            </div>
+              <button
+                onClick={handleNext}
+                className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all flex items-center justify-center text-white"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+            </div>
         </div>
-      </div>
-
-      {/* Mobile Layout */}
-      <div className="md:hidden flex flex-col min-h-screen">
-        <div className="flex-1 flex flex-col px-6 py-8">
-          {/* Header */}
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-1">C Cities App</h2>
-            <p className="text-slate-400 text-sm">AI social network for counties</p>
-          </div>
-
-          {/* Image Section */}
-         <img
-                src={userImage.src}
-                alt="Community connection illustration"
-                className="w-full h-full object-contain"
-              />
 
           {/* Content */}
           <div className="flex-1 space-y-8 mt-4">
             <div>
               <h1 className="text-3xl font-bold text-gray-100 mb-4">
-                Next Gen AI Social Media App for <span
+                Next Gen AI powered Social Network App for over <span
          className={` text-slate-500 inline-block text-outline-white-sm ${
           animate ? "animate__animated animate__slideInUp" : ""
         }`}
       >
         {textArray[currentIndex]}
-      </span>
+      </span> in different communities
               </h1>
               <p className="text-gray-200 text-lg">
                  Connect locally, engage meaningfully, and discover your community. Share what matters and build lasting relationships.

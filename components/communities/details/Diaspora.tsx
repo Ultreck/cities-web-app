@@ -97,7 +97,7 @@ export default function Diaspora({ community }: { community: any }) {
         </div>
         <h3 className="text-lg font-semibold text-gray-900 mb-2">No members found</h3>
         <p className="text-gray-600">
-          No diaspora members match your search for "<span className="font-medium">{searchQuery}</span>". Try different keywords.
+          No diaspora members match your search for&dqote;<span className="font-medium">{searchQuery}</span>". Try different keywords.
         </p>
       </div>
     </div>
