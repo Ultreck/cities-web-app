@@ -136,20 +136,33 @@ const CommentsDailog = ({
   };
 
   const subComment = (id: string) => {
-    const [repl, setrepl] = useState(second)
+    const [reply, setReply] = useState();
+
+    useEffect(() => {
+      const response = clientApi.get(`/post/comments/?comment_id=${id}`);
+      response
+        .then((res) => {
+          console.log(res.data);
+          setReply(res.data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }, []);
+
     return (
       <div key={id} className="text ml-10">
         <div className="flex gap-3 my-5 flex-1">
-          <Avatar>
+          {/* <Avatar>
             <AvatarImage src={rep.avatar} alt={rep.author} />
             <AvatarFallback>{rep.author.charAt(0)}</AvatarFallback>
-          </Avatar>
+          </Avatar> */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <CardTitle className="text-base">{rep.author}</CardTitle>
+              {/* <CardTitle className="text-base">{rep.author}</CardTitle> */}
             </div>
             <CardDescription className="flex items-center gap-2">
-              {rep.username} • {rep.time}
+              {/* {rep.username} • {rep.time} */}
             </CardDescription>
             <div className="text flex justify-between">
               <p className="text">{rep?.content}</p>
