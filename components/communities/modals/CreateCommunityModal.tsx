@@ -83,7 +83,7 @@ export function CreateCommunityModal({
       form.reset();
       toast.success("Community created successfully!");
       setOpen(false);
-    } catch (err: any) {
+    } catch (err) {
       console.error("Failed to create community:", err);
       toast.error(
         err.response?.data?.message || "There was an error creating this community, please try again."

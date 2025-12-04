@@ -125,7 +125,7 @@ export function RentPostingModal({
       setPreviewImages([]);
       toast.success("Rental property posted successfully!");
       setOpen(false);
-    } catch (err: any) {
+    } catch (err) {
       console.error("Failed to create rent post:", err);
       toast.error(
         err.response?.data?.message || "There was an error posting this property, please try again."

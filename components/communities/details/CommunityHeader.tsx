@@ -96,6 +96,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { ChevronLeft, Plus, Play, Globe, Eye, ThumbsUp, ThumbsDown, MessageCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useJoinCommunityMutation } from '@/apis/communityMutation';
+import { CommunityProps } from '@/types/type-props';
 
 interface CommunityHeaderProps {
   name: string;
@@ -114,7 +115,7 @@ interface CommunityHeaderProps {
   setActiveTab?: React.Dispatch<React.SetStateAction<string>>;
   activeTab?: string;
   hasJoined?: boolean;
-  community?: any;
+  community?: CommunityProps;
 }
 
 export const CommunityHeader: React.FC<CommunityHeaderProps> = ({
@@ -144,7 +145,7 @@ export const CommunityHeader: React.FC<CommunityHeaderProps> = ({
   onNext,
 }) => {
     const router = useRouter();
-
+console.log('community in header:', community);
     const {mutateAsync:joinCommunity, isPending} = useJoinCommunityMutation();
   const formatNumber = (num: number): string => {
     if (num >= 1000000) {

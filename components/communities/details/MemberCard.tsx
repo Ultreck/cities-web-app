@@ -13,12 +13,10 @@ interface MemberCardProps {
   first_name: string;
   last_name: string;
   profile_pic: string;
-  role: string;
-  bio_info: string;
-  joinDate: string;
-  isFollowing?: boolean;
+  role?: string;
+  bio_info?: string;
+  joinDate?: string;
   follow:number,
-  onFollow?: () => void;
   onMessage?: () => void;
   isLoggedInUser?:boolean;
 }
@@ -31,10 +29,8 @@ export const MemberCard: React.FC<MemberCardProps> = ({
   role,
   bio_info,
   joinDate,
-  isFollowing = false,
   isLoggedInUser,
   follow,
-  onFollow,
   onMessage,
 }) => {
 

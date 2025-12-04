@@ -42,7 +42,8 @@ const CommentsDailog = ({
   const [commentIndex, setCommentIndex] = useState<string | undefined>("");
 
   const handleLike = () => {
-    const newLikedState = !isLiked;
+    // const newLikedState = !isLiked;
+    const newLikedState = isLiked;
     setIsLiked(newLikedState);
     setLikes((prev) => (newLikedState ? prev + 1 : prev - 1));
   };

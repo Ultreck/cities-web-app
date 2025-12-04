@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, MapPin, Users, Globe, User } from 'lucide-react';
 import { useGetDiasporaUsers } from '@/apis/communityMutation';
+import { CommunityProps, DiasporaUserProps } from '@/types/type-props';
 
 interface DiasporaUser {
   id: string;
@@ -19,13 +20,14 @@ interface DiasporaUser {
   isConnected?: boolean;
 }
 
-export default function Diaspora({ community }: { community: any }) {
+export default function Diaspora({ community }: { community: CommunityProps }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [connectedUsers, setConnectedUsers] = useState<Set<string>>(new Set());
   const { data: diasporaUsers, isLoading: diasporaUserLoading } = useGetDiasporaUsers(community?.unique_id);
 
   // Transform API data to DiasporaUser format
-  const diasporaProfiles: DiasporaUser[] = diasporaUsers?.map((user: any) => ({
+  console.log({diasporaUsers})
+  const diasporaProfiles: DiasporaUser[] = diasporaUsers?.map((user: DiasporaUserProps) => ({
     id: user.unique_id,
     name: `${user.user?.first_name || ''} ${user.user?.last_name || ''}`.trim() || 'Unknown User',
     location: user.reside_country || user.user?.country || 'Unknown Location',
@@ -97,7 +99,7 @@ export default function Diaspora({ community }: { community: any }) {
         </div>
         <h3 className="text-lg font-semibold text-gray-900 mb-2">No members found</h3>
         <p className="text-gray-600">
-          No diaspora members match your search for "<span className="font-medium">{searchQuery}</span>". Try different keywords.
+          No diaspora members match your search for&ldquo;<span className="font-medium">{searchQuery}</span>&rdquo;. Try different keywords.
         </p>
       </div>
     </div>

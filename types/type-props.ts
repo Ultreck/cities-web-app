@@ -42,7 +42,7 @@ export interface Post {
 }
 
 export interface CommunityCard {
-  id: string;
+  unique_id: string;
   name: string;
   description: string;
   users: Record<string, any>[];
@@ -218,4 +218,184 @@ export interface CommentType {
   replyCount: number;
 }
 
+export interface CommunityProps {
+  unique_id: string;
+  name: string;
+  city: string;
+  state: string;
+  country: string;
+  createdAt: string;
+  updatedAt: string;
+  members: number;
+  isMember: number;
+  users: {
+    unique_id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone_number: string;
+    country: string;
+    business_name: string | null;
+    business_account_type: boolean;
+    social_media_username: string;
+    user_name: string;
+    profile_pic: string;
+    follow: number;
+  }[];
+  video: {
+    data: {
+      unique_id: string;
+      user_id: string;
+      User: {
+        unique_id: string;
+        first_name: string;
+        last_name: string;
+        email: string;
+        phone_number: string;
+        country: string;
+        business_name: string | null;
+        business_account_type: boolean;
+        social_media_username: string;
+        user_name: string;
+        profile_pic: string;
+        follow: number;
+      };
+      reposter_id: string | null;
+      community_id: string;
+      IsRePost: boolean;
+      audience: string;
+      isTrend: boolean;
+      createdAt: string;
+      updatedAt: string;
+      post_id: string;
+      Post: {
+        unique_id: string;
+        content: string;
+        rePostCount: number;
+        User: {
+          unique_id: string;
+          first_name: string;
+          last_name: string;
+          email: string;
+          phone_number: string;
+          country: string;
+          business_name: string | null;
+          business_account_type: boolean;
+          social_media_username: string;
+          user_name: string;
+          profile_pic: string;
+          follow: number;
+        };
+        community_id: string;
+        user_id: string | number | null;
+        heading: string | null;
+        createdAt: string;
+        updatedAt: string;
+        commentcount: number;
+        mediacount: number;
+        reactionscount: number;
+        isLike: number;
+        isView: number;
+        views: number;
+        Media: [
+          {
+            unique_id: string;
+            type: string;
+            media: string;
+            user_id: string | number | null;
+            User: string | null;
+            is_video: true;
+            createdAt: string;
+            updatedAt: string;
+            post_id: string;
+          },
+        ];
+        Reactions: {
+          unique_id: string;
+          user_id: string;
+          User: {
+            unique_id: string;
+            first_name: string;
+            last_name: string;
+            email: string;
+            phone_number: string;
+            country: string;
+            business_name: string | null;
+            business_account_type: boolean;
+            social_media_username: string;
+            user_name: string;
+            profile_pic: string;
+            follow: number;
+          } | null;
+          type: string;
+          createdAt: string;
+          updatedAt: string;
+          post_id: string;
+          comment_id: string | number | null;
+        }[];
+      };
+    }[];
+    status: boolean | null;
+  };
+}
 
+export interface DiasporaUserProps {
+  unique_id: string;
+  reside_country: string;
+  about: string;
+  user_id: string;
+  media: {
+    media: string;
+    is_pdf: boolean;
+    is_image: boolean;
+    is_video: boolean;
+  };
+  createdAt: string;
+  updatedAt: string;
+  user: {
+    unique_id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone_number: string | number;
+    country: string;
+    business_name: string | null;
+    business_account_type: number;
+    social_media_username: string;
+    user_name: string;
+    profile_pic: string;
+    age: string | number | null;
+  };
+  status: boolean | null;
+}
+
+export interface RentItemProps {
+  unique_id: string;
+  name: string;
+  price: string;
+  location: string;
+  currency: string;
+  createdAt: string;
+  rent_type: string;
+  media: {
+    media: string;
+    is_pdf: boolean;
+    is_image: boolean;
+    is_video: boolean;
+  }[];
+  user_id: string;
+  user: {
+    unique_id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone_number: string;
+    country: string;
+    business_name: string | null;
+    business_account_type: boolean;
+    social_media_username: string;
+    user_name: string;
+    profile_pic: string;
+    follow: number;
+  };
+}

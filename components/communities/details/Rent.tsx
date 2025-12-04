@@ -1,13 +1,14 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Search, Home, MapPin } from 'lucide-react';
-import { CreatePostModal, PostData } from './CreatePostModal';
-import { PropertyCard } from './PropertyCard';
-import { useGetAllRents } from '@/apis/communityMutation';
-import { RentPostingModal } from '../modals/RentPostingModal';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Search, Home, MapPin } from "lucide-react";
+import { CreatePostModal, PostData } from "./CreatePostModal";
+import { PropertyCard } from "./PropertyCard";
+import { useGetAllRents } from "@/apis/communityMutation";
+import { RentPostingModal } from "../modals/RentPostingModal";
+import { CommunityProps, RentItemProps } from "@/types/type-props";
 
 interface Property {
   id: string;
@@ -21,31 +22,51 @@ interface Property {
   images?: string[];
   currency?: string;
   rentType?: string;
-  user?: any;
+  user?: { [key: string]: unknown };
 }
 
-export default function Rent({ community, hasJoined }: { community: any, hasJoined:boolean }) {
+export default function Rent({
+  community,
+  hasJoined,
+}: {
+  community: CommunityProps;
+  hasJoined: boolean;
+}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [favoriteProperties, setFavoriteProperties] = useState<Set<string>>(new Set());
+  const [searchQuery, setSearchQuery] = useState<string | undefined>("");
+  const [favoriteProperties, setFavoriteProperties] = useState<Set<string>>(
+    new Set()
+  );
   const [localProperties, setLocalProperties] = useState<Property[]>([]);
-  const { data: allRentData, isLoading: rentDataLoading } = useGetAllRents(community?.unique_id);
+  const { data: allRentData, isLoading: rentDataLoading } = useGetAllRents(
+    community?.unique_id
+  );
 
+  console.log({ allRentData });
   // Transform API data to Property format
-  const apiProperties: Property[] = allRentData?.map((property: any) => ({
-    id: property.unique_id,
-    title: property.name || 'Untitled Property',
-    image: property.media?.[0]?.media || '/default-property.jpg',
-    images: property.media?.map((media: any) => media.media) || [],
-    price: `${property.currency || ''} ${property.price || '0'}`.trim(),
-    location: property.location || 'Location not specified',
-    bedrooms: 0, // You might want to add this field to your API
-    bathrooms: 0, // You might want to add this field to your API
-    description: `Available for ${property.rent_type || 'rent'}`,
-    currency: property.currency,
-    rentType: property.rent_type,
-    user: property.user
-  })) || [];
+  const apiProperties: Property[] =
+    allRentData?.map((property: RentItemProps) => ({
+      id: property.unique_id,
+      title: property.name || "Untitled Property",
+      image: property.media?.[0]?.media || "/default-property.jpg",
+      images:
+        property.media?.map(
+          (media: {
+            media: string;
+            is_pdf: boolean;
+            is_image: boolean;
+            is_video: boolean;
+          }) => media.media
+        ) || [],
+      price: `${property.currency || ""} ${property.price || "0"}`.trim(),
+      location: property.location || "Location not specified",
+      bedrooms: 0, // You might want to add this field to your API
+      bathrooms: 0, // You might want to add this field to your API
+      description: `Available for ${property.rent_type || "rent"}`,
+      currency: property.currency,
+      rentType: property.rent_type,
+      user: property.user,
+    })) || [];
 
   // Combine API properties with locally created properties
   const allProperties = [...apiProperties, ...localProperties];
@@ -64,14 +85,14 @@ export default function Rent({ community, hasJoined }: { community: any, hasJoin
     const newProperty: Property = {
       id: String(Date.now()), // Temporary ID for local properties
       title: data.title,
-      image: '/default-property.jpg',
-      price: data.salary || 'Contact for price',
-      location: data.location || 'TBD',
+      image: "/default-property.jpg",
+      price: data.salary || "Contact for price",
+      location: data.location || "TBD",
       bedrooms: 2, // Default values
       bathrooms: 1, // Default values
       description: data.description,
     };
-    setLocalProperties(prev => [newProperty, ...prev]);
+    setLocalProperties((prev) => [newProperty, ...prev]);
     setIsModalOpen(false);
   };
 
@@ -108,16 +129,21 @@ export default function Rent({ community, hasJoined }: { community: any, hasJoin
         <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
           <Home className="w-8 h-8 text-gray-400" />
         </div>
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">No rental properties yet</h3>
+        <h3 className="text-xl font-semibold text-gray-900 mb-2">
+          No rental properties yet
+        </h3>
         <p className="text-gray-600 mb-6">
-          There are currently no rental properties listed in this community. Be the first to post a property for rent!
+          There are currently no rental properties listed in this community. Be
+          the first to post a property for rent!
         </p>
-      {hasJoined && <Button
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-          onClick={() => setIsModalOpen(true)}
-        >
-          Post first property
-        </Button>}
+        {hasJoined && (
+          <Button
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Post first property
+          </Button>
+        )}
       </div>
     </div>
   );
@@ -129,9 +155,13 @@ export default function Rent({ community, hasJoined }: { community: any, hasJoin
         <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
           <Search className="w-6 h-6 text-gray-400" />
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">No properties found</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          No properties found
+        </h3>
         <p className="text-gray-600">
-          No properties match your search for "<span className="font-medium">{searchQuery}</span>". Try different keywords.
+          No properties match your search for &ldquo;
+          <span className="font-medium">{searchQuery}</span>&rdquo;. Try
+          different keywords.
         </p>
       </div>
     </div>
@@ -142,12 +172,14 @@ export default function Rent({ community, hasJoined }: { community: any, hasJoin
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-900">Rental Properties</h1>
-      {hasJoined &&  <Button
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-          onClick={() => setIsModalOpen(true)}
-        >
-          Post new property
-        </Button>}
+        {hasJoined && (
+          <Button
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Post new property
+          </Button>
+        )}
       </div>
 
       {/* Search Bar */}
@@ -157,7 +189,10 @@ export default function Rent({ community, hasJoined }: { community: any, hasJoin
           placeholder="Search properties by title, location, or description..."
           className="pl-10"
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            // console.log('This is inside the search input:',e.target.value);
+            setSearchQuery(e.target.value);
+          }}
         />
       </div>
 
@@ -186,7 +221,7 @@ export default function Rent({ community, hasJoined }: { community: any, hasJoin
                   {...property}
                   isFavorite={favoriteProperties.has(property.id)}
                   onFavorite={() => handleFavorite(property.id)}
-                  onContact={() => console.log('Contact:', property.title)}
+                  onContact={() => console.log("Contact:", property.title)}
                 />
               ))}
             </div>
@@ -195,7 +230,11 @@ export default function Rent({ community, hasJoined }: { community: any, hasJoin
       )}
 
       {/* Create Property Modal */}
-      <RentPostingModal open={isModalOpen} setOpen={setIsModalOpen} communityId={community?.unique_id} />
+      <RentPostingModal
+        open={isModalOpen}
+        setOpen={setIsModalOpen}
+        communityId={community?.unique_id}
+      />
       {/* <CreatePostModal
         isOpen={isModalOpen}
         title="Post new property"

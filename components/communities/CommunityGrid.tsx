@@ -65,7 +65,7 @@ export default function CommunityGrid({filteredCommunities, isLoading}:{filtered
             // Show actual communities when not loading
             filteredCommunities?.map((community) => (
               <div
-                key={community.id}
+                key={community.unique_id}
                 className="bg-white rounded-xl p-4 border border-gray-200 hover:shadow-lg transition cursor-pointer flex flex-col"
               >
                 <h3 className="font-bold text-gray-900 mb-2">{community.name}</h3>

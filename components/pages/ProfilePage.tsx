@@ -68,7 +68,7 @@ interface ProfilePageProps {
 
 export function ProfilePage() {
   const [open, setOpen] = useState(false);
-  const {details:user, isLoading} = useSelector((state: any) => state.user);
+  const {details:user, isLoading} = useSelector((state: { [key: string]: unknown }) => state.user);
     const [searchQuery, setSearchQuery] = useState("");
   const [editedUser, setEditedUser] = useState<User>(user || {} as User);
   const { handlePostLikes, handleRepost} = usePostHook();

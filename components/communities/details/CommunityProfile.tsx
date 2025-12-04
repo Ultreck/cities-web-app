@@ -6,6 +6,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CommunityHeader } from './CommunityHeader';
 import { MemberCard } from './MemberCard';
 import { useSelector } from 'react-redux';
+import { selectUserDetails } from '@/redux/selectors';
+import { CommunityProps } from '@/types/type-props';
 
 interface Member {
   id: string;
@@ -51,10 +53,11 @@ const mockMembers: Member[] = [
   },
 ];
 
-export default function CommunityProfile({children, setActiveTab, activeTab, community, hasJoined}: {children: React.ReactNode, setActiveTab: React.Dispatch<React.SetStateAction<string>>, activeTab: string, community: any, hasJoined: boolean}) {
+export default function CommunityProfile({children, setActiveTab, activeTab, community, hasJoined}: {children: React.ReactNode, setActiveTab: React.Dispatch<React.SetStateAction<string>>, activeTab: string, community: CommunityProps, hasJoined: boolean}) {
   const [isFollowing, setIsFollowing] = useState(false);
   const [followingMembers, setFollowingMembers] = useState<Set<string>>(new Set());
-     const user = useSelector((state: any) => state.user.details);
+     const user = useSelector(selectUserDetails);
+     
  console.log({'User in main component':user});
 
   const handleFollow = () => {
@@ -125,9 +128,7 @@ export default function CommunityProfile({children, setActiveTab, activeTab, com
               <MemberCard
                 key={member.unique_id}
                 {...member}
-                isFollowing={followingMembers.has(member.unique_id)}
-                onFollow={() => handleMemberFollow(member.unique_id)}
-                onMessage={() => console.log('Message', member.name)}
+                onMessage={() => console.log('Message', member.first_name)}
                 isLoggedInUser={user?.unique_id===member.unique_id}
               />
             ))}

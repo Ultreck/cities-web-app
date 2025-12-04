@@ -14,9 +14,7 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import clientApi from "@/apis/clientApi";
 import { toast } from "react-toastify";
-import CountrySelect from "../registrations/CountrySelect";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Dialog,
@@ -30,9 +28,11 @@ import {
 import { useSelector } from "react-redux";
 import { Textarea } from "@/components/ui/textarea";
 import { useUpdateUserMutation } from "@/apis/auth";
+import { selectUserDetails } from "@/redux/selectors";
+import UpdateUserCountrySelect from "../registrations/UpdateUserCountrySelect";
 
 // Update schema for profile update
-const profileUpdateSchema = z.object({
+export const profileUpdateSchema = z.object({
   first_name: z.string().min(1, "First name is required"),
   last_name: z.string().min(1, "Last name is required"),
   email: z.string().email("Invalid email address"),
@@ -49,9 +49,10 @@ const profileUpdateSchema = z.object({
 export type ProfileUpdateProps = z.infer<typeof profileUpdateSchema>;
 
 export function ProfileUpdateDialog({open, setOpen}:{open:boolean,setOpen: (open:boolean)=>void}) {
-  const user = useSelector((state: any) => state.user.details);
+  const user = useSelector(selectUserDetails);
   const { mutateAsync: updateUser,isPending:loading } = useUpdateUserMutation()
 //   const [] = useState(false);
+console.log("User in ProfileUpdateDialog:", user);
 
   const form = useForm<ProfileUpdateProps>({
     resolver: zodResolver(profileUpdateSchema),
@@ -72,22 +73,25 @@ export function ProfileUpdateDialog({open, setOpen}:{open:boolean,setOpen: (open
 
   // Populate form with user data when dialog opens
   useEffect(() => {
-    if (user && open) {
-      form.reset({
-        first_name: user.first_name || "",
-        last_name: user.last_name || "",
-        email: user.email || "",
-        phone_number: user.phone_number || "",
-        user_name: user.user_name || "",
-        gender: user.gender || "male",
-        city: user.city || "",
-        state: user.state || "",
-        country: user.country || "",
-        country_code: user.country_code || "",
-        bio_info: user.bio_info || "",
-      });
-    }
-  }, [user, open, form]);
+  if (user && open) {
+    const safeValues: ProfileUpdateProps = {
+      first_name: String(user.first_name || ""),
+      last_name: String(user.last_name || ""),
+      email: String(user.email || ""),
+      phone_number: String(user.phone_number || ""),
+      user_name: String(user.user_name || ""),
+      gender: (user.gender as "male" | "female" | "others") || "male",
+      city: String(user.city || ""),
+      state: String(user.state || ""),
+      country: String(user.country || ""),
+      country_code: String(user.country_code || ""),
+      bio_info: String(user.bio_info || "")
+    };
+
+    form.reset(safeValues);
+  }
+}, [user, open, form]);
+
 
   const onSubmit = async (data: ProfileUpdateProps) => {
     try {
@@ -190,7 +194,7 @@ export function ProfileUpdateDialog({open, setOpen}:{open:boolean,setOpen: (open
                   <FormLabel>Phone number</FormLabel>
                   <FormControl>
                     <div className="flex gap-2">
-                      <CountrySelect form={form} />
+                      <UpdateUserCountrySelect form={form} />
                       <Input
                         className="h-11"
                         placeholder="070*******25"

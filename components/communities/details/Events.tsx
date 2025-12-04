@@ -8,6 +8,7 @@ import { CreatePostModal, PostData } from './CreatePostModal';
 import { EventCard } from '../EventCard';
 import { useGetEvents } from '@/apis/communityMutation';
 import { EventCreatingModal } from '../modals/EventCreatingModal';
+import { CommunityProps } from '@/types/type-props';
 
 interface Event {
   id: string;
@@ -23,14 +24,14 @@ interface Event {
   currency?: string;
 }
 
-export default function Events({ community, hasJoined }: { community: any, hasJoined:boolean }) {
+export default function Events({ community, hasJoined }: { community: CommunityProps, hasJoined:boolean }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [localEvents, setLocalEvents] = useState<Event[]>([]);
   const { data: eventData, isLoading } = useGetEvents(community?.unique_id);
 
   // Transform API data to Event format
-  const apiEvents: Event[] = eventData?.map((event: any) => {
+  const apiEvents: Event[] = eventData?.map((event: { [key: string]: string }) => {
     const { date: formattedDate, time: formattedTime } = formatEventDateTime(event.from, event.to);
     
     return {
@@ -171,7 +172,7 @@ export default function Events({ community, hasJoined }: { community: any, hasJo
         </div>
         <h3 className="text-lg font-semibold text-gray-900 mb-2">No events found</h3>
         <p className="text-gray-600">
-          No events match your search for "<span className="font-medium">{searchQuery}</span>". Try different keywords.
+          No events match your search for &ldquo;<span className="font-medium">{searchQuery}</span>&rdquo;. Try different keywords.
         </p>
       </div>
     </div>

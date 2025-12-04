@@ -8,6 +8,7 @@ import { CreatePostModal, PostData } from './CreatePostModal';
 import { JobCard } from './JobCard';
 import { useGetJobs } from '@/apis/communityMutation';
 import { JobPostingModal } from '../modals/JobPostingModal';
+import { CommunityProps } from '@/types/type-props';
 
 interface Job {
   id: string;
@@ -23,7 +24,7 @@ interface Job {
   link?: string | null;
 }
 
-export default function Jobs({ community, hasJoined }: { community: any, hasJoined:boolean }) {
+export default function Jobs({ community, hasJoined }: { community: CommunityProps, hasJoined:boolean }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [localJobs, setLocalJobs] = useState<Job[]>([]);
@@ -31,7 +32,7 @@ export default function Jobs({ community, hasJoined }: { community: any, hasJoin
 
 
   // Transform API data to Job format
-  const apiJobs: Job[] = jobData?.map((job: any) => ({
+  const apiJobs: Job[] = jobData?.map((job: { [key: string]: string }) => ({
     id: job.unique_id,
     title: job.role || 'No title',
     company: job.company || 'Company not specified',
@@ -140,7 +141,7 @@ export default function Jobs({ community, hasJoined }: { community: any, hasJoin
         </div>
         <h3 className="text-lg font-semibold text-gray-900 mb-2">No jobs found</h3>
         <p className="text-gray-600">
-          No jobs match your search for "<span className="font-medium">{searchQuery}</span>". Try different keywords.
+          No jobs match your search for &ldquo;<span className="font-medium">{searchQuery}</span>&rdquo;. Try different keywords.
         </p>
       </div>
     </div>

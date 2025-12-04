@@ -67,7 +67,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
   };
 
   const handleChange = (
-    e: any
+    e: { target: { name: string; value: string } }
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
