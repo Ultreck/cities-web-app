@@ -45,7 +45,7 @@ export interface CommunityCard {
   unique_id: string;
   name: string;
   description: string;
-  users: Record<string, any>[];
+  users: User[];
   conversationCount: number;
 }
 
