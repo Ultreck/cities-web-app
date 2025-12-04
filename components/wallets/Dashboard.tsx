@@ -26,6 +26,8 @@ export default function Dashboard() {
   const handlePaymentType = (
     type: "transfer" | "outbound" | "inbound" | "airtime" | "data"
   ) => {
+    console.log(type);
+    
     // updatePayment({ type, step: 0 });
   };
 

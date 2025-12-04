@@ -1,11 +1,10 @@
-import { ProfilePage } from '@/components/pages/ProfilePage'
-import { currentUser, initialPosts } from '@/lib/helper'
 import React from 'react'
+import { ProfilePage } from '@/components/pages/ProfilePage'
 
 const UserProfilePage = () => {
   return (
     <div>
-        <ProfilePage posts={initialPosts} user={currentUser} />
+        <ProfilePage />
     </div>
   )
 }

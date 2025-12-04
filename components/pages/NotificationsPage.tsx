@@ -37,7 +37,7 @@ export function NotificationsPage() {
   setNotifications(initialNotifications);
   }, []);
   
-  const getIcon = (type: any) => {
+  const getIcon = (type: string) => {
     switch (type) {
       case "like":
         return <Heart className="w-5 h-5 text-red-500" />;
@@ -54,9 +54,9 @@ export function NotificationsPage() {
     }
   };
 
-  const markAsRead = (id: any) => {
-    setNotifications((prev: any) =>
-      prev.map((notif: any) =>
+  const markAsRead = (id: number) => {
+    setNotifications((prev: NotificationProps[]) =>
+      prev.map((notif: NotificationProps) =>
         notif.id === id ? { ...notif, read: true } : notif
       )
     );
@@ -64,18 +64,18 @@ export function NotificationsPage() {
 
   const markAllAsRead = () => {
     setNotifications((prev) =>
-      prev?.map((notif) => ({ ...notif, read: true }))
+      prev.map((notif) => ({ ...notif, read: true }))
     );
   };
 
-  const unreadCount = notifications?.filter((n) => !n.read).length;
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   const filterNotifications = (filter: string) => {
     switch (filter) {
       case "unread":
-        return notifications?.filter((n) => !n.read);
+        return notifications.filter((n) => !n.read);
       case "read":
-        return notifications?.filter((n) => n.read);
+        return notifications.filter((n) => n.read);
       default:
         return notifications;
     }

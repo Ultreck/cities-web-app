@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Ban, Trash2 } from 'lucide-react';
 
@@ -62,9 +63,11 @@ export default function BlockedUsers() {
               className="bg-white rounded-lg shadow-sm p-4 border border-gray-200 flex items-center justify-between"
             >
               <div className="flex items-center gap-4 flex-1">
-                <img
+                <Image
                   src={user.avatar}
                   alt={user.name}
+                  width={48}
+                  height={48}
                   className="w-12 h-12 rounded-full object-cover"
                 />
                 <div className="flex-1">
@@ -91,7 +94,7 @@ export default function BlockedUsers() {
           <Ban className="w-12 h-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-gray-900 mb-2">No Blocked Users</h3>
           <p className="text-gray-600">
-            You haven't blocked any users. Users you block will appear here.
+            You haven&apos;t blocked any users. Users you block will appear here.
           </p>
         </div>
       )}
@@ -101,12 +104,11 @@ export default function BlockedUsers() {
         <h3 className="font-semibold text-blue-900 mb-2">About Blocking</h3>
         <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
           <li>Blocked users cannot see your profile or send you messages</li>
-          <li>You won't see posts or comments from blocked users</li>
-          <li>Blocking is private - the other user won't be notified</li>
+          <li>You won&apos;t see posts or comments from blocked users</li>
+          <li>Blocking is private - the other user won&apos;t be notified</li>
           <li>You can unblock users at any time from this page</li>
         </ul>
       </div>
     </div>
   );
 }
-

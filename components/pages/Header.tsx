@@ -15,31 +15,31 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "@/redux/selectors";
+import { RePostType } from "@/types/type-props";
+import UserDropdown from "../UserDropdown";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [posts, setPosts] = useState(initialPosts);
-  const [notifications, setNotifications] = useState(initialNotifications);
-  const [messages, setMessages] = useState(initialMessages);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
     const details = useSelector(selectUserDetails);
     
 
-  const unreadNotifications = notifications.filter((n) => !n.read).length;
-  const unreadMessages = messages.reduce((sum, msg) => sum + msg.unread, 0);
+  const unreadNotifications = initialNotifications.filter((n) => !n.read).length;
+  const unreadMessages = initialMessages.reduce((sum, msg) => sum + msg.unread, 0);
   const searchData = [
-    ...posts.map((p) => ({ ...p, type: "post" })),
+    ...initialPosts.map((p) => ({ ...p, type: "post" })),
     ...initialCommunities.map((c) => ({ ...c, type: "community" })),
     ...initialJobs.map((j) => ({ ...j, type: "job" })),
   ];
 
-  const handleSearch = (item: any) => {
+  const handleSearch = (item: { type: string }) => {
     console.log("Selected:", item);
     // Navigate to the appropriate tab based on item type
-    if (item.type === "community") {
-      //   setActiveTab("community");
-    } else if (item.type === "job") {
-      //   setActiveTab("forsale");
-    }
+    // if (item.type === "community") {
+    //   //   setActiveTab("community");
+    // } else if (item.type === "job") {
+    //   //   setActiveTab("forsale");
+    // }
   };
   return (
     <div>
@@ -57,19 +57,19 @@ const Header = () => {
               )}
             </button>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              MCity
+              City
             </h1>
           </div>
 
           <div className="hidden md:flex flex-1 max-w-xl mx-8">
-            <SearchBar
+            {/* <SearchBar
               placeholder="Search communities, posts, people..."
               data={searchData}
               onSearch={handleSearch}
-            />
+            /> */}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <Link href="/n/notifications" className="relative">
               <Bell className="w-5 h-5" />
               {unreadNotifications > 0 && (
@@ -82,10 +82,11 @@ const Header = () => {
                 <span className="absolute top-0 right-0 w-2 h-2 bg-destructive rounded-full"></span>
               )}
             </Link>
-            <Avatar className="w-8 h-8 cursor-pointer">
+            {/* <Avatar className="w-8 h-8 cursor-pointer">
                <AvatarImage src={details?.profilePicture?.media} />
               <AvatarFallback>{currentUser?.avatar}</AvatarFallback>
-            </Avatar>
+            </Avatar> */}
+            <UserDropdown setIsMenuOpen={setIsMenuOpen} />
           </div>
         </div>
       </header>

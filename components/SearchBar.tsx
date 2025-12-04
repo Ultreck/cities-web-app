@@ -6,9 +6,25 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Search, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
-export function SearchBar({ placeholder = "Search...", onSearch, data = [] }: {placeholder: string; onSearch: any; data: any}) {
+interface SearchItem {
+  id: string;
+  type: 'post' | 'community' | 'job';
+  name?: string;
+  title?: string;
+  author?: string;
+  username?: string;
+  content?: string;
+}
+
+interface SearchBarProps {
+  placeholder?: string;
+  onSearch: (item: SearchItem) => void;
+  data: SearchItem[];
+}
+
+export function SearchBar({ placeholder = "Search...", onSearch, data = [] }: SearchBarProps) {
   const [query, setQuery] = useState('')
-  const [results, setResults] = useState([])
+  const [results, setResults] = useState<SearchItem[]>([])
   const [showResults, setShowResults] = useState(false)
 
   useEffect(() => {
@@ -19,7 +35,7 @@ export function SearchBar({ placeholder = "Search...", onSearch, data = [] }: {p
     }
 
     // Filter data based on query
-    const filtered = data.filter((item: any) => {
+    const filtered = data.filter((item) => {
       const searchText = query.toLowerCase()
       return (
         item.name?.toLowerCase().includes(searchText) ||
@@ -34,7 +50,7 @@ export function SearchBar({ placeholder = "Search...", onSearch, data = [] }: {p
     setShowResults(true)
   }, [query, data])
 
-  const handleSelect = (item: any) => {
+  const handleSelect = (item: SearchItem) => {
     if (onSearch) {
       onSearch(item)
     }
@@ -80,14 +96,14 @@ export function SearchBar({ placeholder = "Search...", onSearch, data = [] }: {p
                 className="w-full text-left p-3 hover:bg-accent rounded-lg transition-colors"
                 onClick={() => handleSelect(item)}
               >
-                <div className="font-medium text-sm">
+                {/* <div className="font-medium text-sm">
                   {item.name || item.title || item.author}
                 </div>
                 {(item.username || item.content) && (
                   <div className="text-xs text-muted-foreground truncate">
                     {item.username || item.content}
                   </div>
-                )}
+                )} */}
               </button>
             ))}
           </CardContent>
@@ -97,7 +113,7 @@ export function SearchBar({ placeholder = "Search...", onSearch, data = [] }: {p
       {showResults && results.length === 0 && query && (
         <Card className="absolute top-full mt-2 w-full z-50">
           <CardContent className="p-4 text-center text-sm text-muted-foreground">
-            No results found for "{query}"
+            No results found for &quot;{query}&quot;
           </CardContent>
         </Card>
       )}

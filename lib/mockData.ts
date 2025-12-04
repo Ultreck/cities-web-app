@@ -1,4 +1,10 @@
-import { Product, Community, Seller, CommunityCard, LocationView } from "../types/type-props";
+import {
+  Product,
+  Community,
+  Seller,
+  CommunityCard,
+  LocationView,
+} from "../types/type-props";
 
 export const mockProducts: Product[] = [
   {
@@ -203,12 +209,12 @@ export const mockProducts: Product[] = [
   },
 ];
 
-
 export const mockCommunities: Community[] = [
   {
     id: "1",
     name: "Lekki",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+    avatar:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
     description: "Connect with people in Lekki",
     members: 565300,
     comments: 565300,
@@ -219,7 +225,8 @@ export const mockCommunities: Community[] = [
   {
     id: "2",
     name: "Festac",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+    avatar:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
     description: "Connect with people in Festac",
     members: 234100,
     comments: 234100,
@@ -229,7 +236,8 @@ export const mockCommunities: Community[] = [
   {
     id: "3",
     name: "Ikorodu",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+    avatar:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
     description: "Connect with people in Ikorodu",
     members: 127900,
     comments: 127900,
@@ -239,7 +247,8 @@ export const mockCommunities: Community[] = [
   {
     id: "4",
     name: "Ikeja",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+    avatar:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
     description: "Connect with people in Ikeja",
     members: 954200,
     comments: 954200,
@@ -249,7 +258,8 @@ export const mockCommunities: Community[] = [
   {
     id: "5",
     name: "Badagry",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+    avatar:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
     description: "Connect with people in Badagry",
     members: 9300,
     comments: 9300,
@@ -259,7 +269,8 @@ export const mockCommunities: Community[] = [
   {
     id: "6",
     name: "Victoria Island",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+    avatar:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
     description: "Connect with people in Victoria Island",
     members: 20004,
     comments: 20004,
@@ -269,7 +280,8 @@ export const mockCommunities: Community[] = [
   {
     id: "7",
     name: "Lagos Island",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+    avatar:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
     description: "Connect with people in Lagos Island",
     members: 2300500,
     comments: 2300500,
@@ -279,7 +291,8 @@ export const mockCommunities: Community[] = [
   {
     id: "8",
     name: "Amuwo Odofin",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
+    avatar:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
     description: "Connect with people in Amuwo Odofin",
     members: 150000,
     comments: 150000,
@@ -288,7 +301,13 @@ export const mockCommunities: Community[] = [
   },
 ];
 
-export const mockCommunityCards: CommunityCard[] = [
+export const mockCommunityCards: {
+  id: string;
+  name: string;
+  description: string;
+  members: string[];
+  conversationCount: number;
+}[] = [
   {
     id: "1",
     name: "Festac",
@@ -374,7 +393,8 @@ export const mockCommunityCards: CommunityCard[] = [
 export const mockLocationView: LocationView = {
   id: "1",
   name: "Lekki",
-  image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop",
+  image:
+    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop",
   stats: {
     community: "150k",
     connection: "325k",
@@ -389,10 +409,11 @@ export const mockLocationView: LocationView = {
   ],
 };
 
-export const mockSellerProfile: Seller = {
+export const mockSellerProfile = {
   id: "seller-1",
   name: "David Adeleke",
-  avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop",
+  avatar:
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop",
   connections: 500,
   bio: "Hi! I am David, I really like traveling to really different countries, most often I am looking for flats that have very friendly landlords in a good location.",
   location: "Lagos, Nigeria",
@@ -400,40 +421,48 @@ export const mockSellerProfile: Seller = {
   posts: [
     {
       id: "1",
-      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
     },
     {
       id: "2",
-      image: "https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=200&h=200&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=200&h=200&fit=crop",
     },
     {
       id: "3",
-      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
     },
     {
       id: "4",
-      image: "https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=200&h=200&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=200&h=200&fit=crop",
     },
     {
       id: "5",
-      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
     },
     {
       id: "6",
-      image: "https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=200&h=200&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=200&h=200&fit=crop",
     },
     {
       id: "7",
-      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
     },
     {
       id: "8",
-      image: "https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=200&h=200&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=200&h=200&fit=crop",
     },
     {
       id: "9",
-      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
     },
   ],
 };
-

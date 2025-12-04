@@ -5,7 +5,7 @@ import img2 from '../assets/images/Image (2).png';
 import img3 from '../assets/images/Image.png';
 export const initialPosts = [
   {
-    id: 1,
+    id: "1",
     author: 'David Adeleke',
     username: '@davido',
     avatar: img1,
@@ -21,7 +21,7 @@ export const initialPosts = [
     image: img1
   },
   {
-    id: 2,
+    id: "2",
     author: 'Peter Okoye',
     username: '@peterp',
     avatar: img2,
@@ -37,7 +37,7 @@ export const initialPosts = [
     image: img2
   },
   {
-    id: 3,
+    id: "3",
     author: 'MTN Nigeria',
     username: '@mtnng',
     avatar: img3,
@@ -55,12 +55,12 @@ export const initialPosts = [
 ];
 
 export const initialCommunities = [
-  { id: 1, name: 'Lekki Community', members: '35k', image: '🏘️', status: 'Public', joined: false },
-  { id: 2, name: 'Victoria Island', members: '235k', image: '🌆', status: 'Public', joined: false },
-  { id: 3, name: 'Ikeja', members: '134k', image: '🏙️', status: 'Public', joined: false },
-  { id: 4, name: 'Festac', members: '2.19k', image: '🏢', status: 'Public', joined: false },
-  { id: 5, name: 'Yaba Community', members: '89k', image: '🏘️', status: 'Public', joined: false },
-  { id: 6, name: 'Surulere Community', members: '156k', image: '🏙️', status: 'Public', joined: false },
+  { id: '1', name: 'Lekki Community', members: '35k', image: '🏘️', status: 'Public', joined: false },
+  { id: '2', name: 'Victoria Island', members: '235k', image: '🌆', status: 'Public', joined: false },
+  { id: '3', name: 'Ikeja', members: '134k', image: '🏙️', status: 'Public', joined: false },
+  { id: '4', name: 'Festac', members: '2.19k', image: '🏢', status: 'Public', joined: false },
+  { id: '5', name: 'Yaba Community', members: '89k', image: '🏘️', status: 'Public', joined: false },
+  { id: '6', name: 'Surulere Community', members: '156k', image: '🏙️', status: 'Public', joined: false },
 ];
 
 export const initialEvents = [
@@ -621,6 +621,9 @@ interface CountryFlagProps {
 
 export default function CountryFlag({ code, size = "w-6 h-6" }: CountryFlagProps) {
   
-  const Flag = (Flags as Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>>)[code];
-  return Flag ? <Flag className={size} aria-label={code} /> : null;
+const Flag = (
+  Flags as unknown as Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>>
+)[code];
+
+return Flag ? <Flag className={size} aria-label={code} /> : null;
 }

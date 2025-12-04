@@ -40,7 +40,7 @@ clientApi.interceptors.response.use(
       console.warn("Unauthorized! Token may have expired.");
      store.dispatch(clearUser());
       localStorage.removeItem("auth_token");
-      window.location.href = "/register?mode=login";
+      window.location.href = "/login";
     }
     return Promise.reject(error);
   }

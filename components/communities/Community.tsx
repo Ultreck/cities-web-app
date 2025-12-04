@@ -17,21 +17,28 @@ import CommunityList from "./CommunityList";
 import CommunityGrid from "./CommunityGrid";
 import { Input } from "../ui/input";
 import { mockCommunityCards } from "@/lib/mockData";
+import { useGetAllCommunities } from "@/apis/communityMutation";
+import { CreateCommunityModal } from "./modals/CreateCommunityModal";
 
 const Community = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [communities, setCommunities] = useState(initialCommunities);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [_communities, setCommunities] = useState(initialCommunities);
+  const {data:communities, isLoading} = useGetAllCommunities()
 
-  const filteredCommunities = mockCommunityCards.filter((community) =>
+  console.log({communities});
+  
+
+  const filteredCommunities =communities ? communities?.filter((community) =>
     community.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  ):[];
 
-  const handleJoinCommunity = (communityId: any) => {
-    setCommunities((prev) =>
-      prev.map((comm) =>
-        comm.id === communityId ? { ...comm, joined: !comm.joined } : comm
-      )
-    );
+  const handleJoinCommunity = (communityId: string) => {
+    // setCommunities((prev) =>
+    //   prev.map((comm) =>
+    //     comm.id === communityId ? { ...comm, joined: !comm.joined } : comm
+    //   )
+    // );
   };
 
   return (
@@ -48,7 +55,7 @@ const Community = () => {
         </div>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h2 className="text-3xl font-bold">Communities</h2>
-          <Button>
+          <Button onClick={()=>setIsModalOpen(true)} >
             <Users className="w-4 h-4 mr-2" />
             Create Community
           </Button>
@@ -57,11 +64,11 @@ const Community = () => {
         <Tabs defaultValue="all" className="w-full">
           <TabsList className="w-full sm:w-auto">
             <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="joined">Joined</TabsTrigger>
+            {/* <TabsTrigger value="joined">Joined</TabsTrigger> */}
             <TabsTrigger value="nearby">Nearby</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="all" className="mt-6">
+          {/* <TabsContent value="all" className="mt-6">
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {initialCommunities.map((community) => (
                 <Card
@@ -98,15 +105,16 @@ const Community = () => {
                 </Card>
               ))}
             </div>
-          </TabsContent>
-          <TabsContent value="joined" className="mt-6">
-            <CommunityGrid filteredCommunities={filteredCommunities} />
+          </TabsContent> */}
+          <TabsContent value="all" className="mt-6">
+            <CommunityGrid isLoading={isLoading} filteredCommunities={filteredCommunities} />
           </TabsContent>
           <TabsContent value="nearby" className="mt-6">
             <CommunityList />
           </TabsContent>
         </Tabs>
       </div>
+      <CreateCommunityModal open={isModalOpen} setOpen={setIsModalOpen} />
     </div>
   );
 };

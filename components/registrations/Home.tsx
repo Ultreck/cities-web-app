@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { APP_LOGO, APP_TITLE } from "../../app/const";
+// import { APP_LOGO, APP_TITLE } from "../../app/const";
 
 /**
  * All content in this page are only for example, delete if unneeded

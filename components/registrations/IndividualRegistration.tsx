@@ -19,7 +19,7 @@ import {
 import useParamHook from "@/hooks/use-param-hook";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import clientApi from "@/lib/clientApi";
+import clientApi from "@/apis/clientApi";
 import { toast } from "react-toastify";
 import CountrySelect from "./CountrySelect";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -29,6 +29,7 @@ import { format } from "date-fns";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
 import { SelectValue } from "@radix-ui/react-select";
 import { PiEyeSlashThin, PiEyeThin } from "react-icons/pi";
+import IndividualCountrySelect from "./IndividualCountrySelect";
 
 export type userSchemaProps = z.infer<typeof userFormSchema>;
 export default function IndividualRegistration() {
@@ -182,7 +183,7 @@ export default function IndividualRegistration() {
                     <FormLabel>Phone number</FormLabel>
                     <FormControl>
                       <div className="text flex gap-2">
-                        <CountrySelect form={form} />
+                        <IndividualCountrySelect form={form} />
                         <Input
                           className="h-11"
                           placeholder="070*******25"

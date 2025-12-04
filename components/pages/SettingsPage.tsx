@@ -117,7 +117,7 @@ export function SettingsPage() {
                     Friends - Your friends within your communities
                   </Button>
                   <Button variant="outline" className="w-full justify-start">
-                    Community except - Don't show to some
+                    Community except - Don&apos;t show to some
                   </Button>
                 </div>
               </div>

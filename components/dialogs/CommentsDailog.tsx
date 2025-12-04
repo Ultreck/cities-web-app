@@ -10,23 +10,19 @@ import {
 } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { CardDescription, CardTitle } from "../ui/card";
-import { Badge } from "../ui/badge";
-import { Post } from "../PostCard";
 import { commentsData } from "@/lib/helper";
 import { IoIosArrowBack } from "react-icons/io";
 import { ScrollArea } from "../ui/scroll-area";
 import { MdFavorite } from "react-icons/md";
-import Image from "next/image";
 import { Button } from "../ui/button";
 import { Eye, Share2, ThumbsUp } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { HiMiniUserGroup } from "react-icons/hi2";
 import { Input } from "../ui/input";
 import { RiSendPlaneFill } from "react-icons/ri";
-import { useRouter } from "next/navigation";
 import { CommentType, RePostType } from "@/types/type-props";
 import PostMedia from "../PostMedia";
-import clientApi from "@/lib/clientApi";
+import clientApi from "@/apis/clientApi";
 import { FaRegComments } from "react-icons/fa6";
 
 const CommentsDailog = ({
@@ -36,28 +32,20 @@ const CommentsDailog = ({
   children: React.ReactNode;
   post: RePostType;
 }) => {
-  const comments = commentsData;
-  const [postComments, setPostComments] = useState<string | undefined>("");
+  const [postComments, setPostComments] = useState("");
   const [commentsDatas, setCommentsDatas] = useState<CommentType[] | []>([]);
-  const [replyComments, setreplyComments] = useState<string | undefined>("");
+  const [replyComments, setreplyComments] = useState("");
   const [isLiked, setIsLiked] = useState(post.Post.isLike);
   const [likes, setLikes] = useState(post.Post.reactionscount);
-  const [showComments, setShowComments] = useState(false);
-  const [commentIndex, setCommentIndex] = useState<string | undefined>("");
-  // const router = useRouter();
   const [isReply, setIsReply] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [commentIndex, setCommentIndex] = useState<string | undefined>("");
 
   const handleLike = () => {
-    const newLikedState = !isLiked;
-    // setIsLiked(newLikedState);
-    // setLikes((prev) => (newLikedState ? prev + 1 : prev - 1));
-    //   if (onLike) onLike(post.id, newLikedState);
-  };
-
-  const handleComment = () => {
-    setShowComments(!showComments);
-    //   if (onComment) onComment(post.id);
+    // const newLikedState = !isLiked;
+    const newLikedState = isLiked;
+    setIsLiked(newLikedState);
+    setLikes((prev) => (newLikedState ? prev + 1 : prev - 1));
   };
 
   const handleShare = () => {
@@ -72,7 +60,7 @@ const CommentsDailog = ({
     return num.toString();
   };
 
-  const handleChanges = (e: any) => {
+  const handleChanges = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPostComments(e.target.value);
     console.log(e.target.value);
   };
@@ -95,6 +83,7 @@ const CommentsDailog = ({
       .then((res) => {
         if (res.data.status) {
           setPostComments("");
+          fetchPostComments();
         }
         console.log("Respose for the comment flow", res);
       })
@@ -113,13 +102,13 @@ const CommentsDailog = ({
     } catch (error) {
       console.error("Error fetching post comments:", error);
     }
-  }, []);
+  }, [post.post_id]);
 
   useEffect(() => {
     fetchPostComments();
   }, [fetchPostComments, postComments]);
 
-  const handleReplyChanges = (e: any) => {
+  const handleReplyChanges = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setreplyComments(e.target.value);
     console.log(e.target.value);
   };
@@ -133,46 +122,13 @@ const CommentsDailog = ({
     const res = await clientApi.post(`/post/comment/reply`, data);
     console.log(res.data);
     setreplyComments("");
+    setIsReply(!isReply)
+    fetchPostComments();
   };
 
-  const subComment = (id: string) => {
-    const [reply, setReply] = useState();
+  console.log({commentsDatas});
+  
 
-    useEffect(() => {
-      const response = clientApi.get(`/post/comments/?comment_id=${id}`);
-      response
-        .then((res) => {
-          console.log(res.data);
-          setReply(res.data.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }, []);
-
-    return (
-      <div key={id} className="text ml-10">
-        <div className="flex gap-3 my-5 flex-1">
-          {/* <Avatar>
-            <AvatarImage src={rep.avatar} alt={rep.author} />
-            <AvatarFallback>{rep.author.charAt(0)}</AvatarFallback>
-          </Avatar> */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              {/* <CardTitle className="text-base">{rep.author}</CardTitle> */}
-            </div>
-            <CardDescription className="flex items-center gap-2">
-              {/* {rep.username} • {rep.time} */}
-            </CardDescription>
-            <div className="text flex justify-between">
-              <p className="text">{rep?.content}</p>
-              <MdFavorite size={20} />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
   return (
     <div>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -184,7 +140,7 @@ const CommentsDailog = ({
               <button className="text" onClick={() => setIsOpen(false)}>
                 <IoIosArrowBack />
               </button>
-              Comments({comments.length})
+              Comments({post.Post.commentcount})
             </DialogTitle>
             <DialogDescription>
               View and add comments on this post.
@@ -206,7 +162,7 @@ const CommentsDailog = ({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <CardTitle className="text-base">
-                        {post.User.first_name}
+                        {post?.User?.first_name + " " + post?.User?.last_name}
                       </CardTitle>
                       {/* {post.sponsored && (
                         <Badge variant="secondary" className="text-xs">
@@ -214,8 +170,8 @@ const CommentsDailog = ({
                         </Badge>
                       )} */}
                     </div>
-                    <CardDescription className="flex items-center gap-2">
-                      {post?.User?.first_name + " " + post?.User?.last_name} •{" "}
+                    <CardDescription className="flex items-center gap-2 mb-2">
+                      {post?.User?.user_name} •{" "}
                       {formatPostTime(post.createdAt)}
                     </CardDescription>
                   </div>
@@ -223,7 +179,7 @@ const CommentsDailog = ({
               </div>
               <div>
                 {/* <h3 className="font-semibold mb-2">{post.Post.title}</h3> */}
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground mb-2">
                   {post.Post.content}
                 </p>
               </div>
@@ -253,9 +209,7 @@ const CommentsDailog = ({
                   <Button
                     variant="ghost"
                     size="sm"
-                    disabled
                     className="flex items-center gap-2"
-                    onClick={handleComment}
                   >
                     <HiMiniUserGroup className="w-4 h-4" />
                     <span className="hidden sm:inline">
@@ -290,7 +244,23 @@ const CommentsDailog = ({
               </div>
             </div>
             <ScrollArea className="h-[270px] bg-white w-full rounded-md p-4">
-              <div className="text relative">
+               <div className="bg-gray-100 rounded-3xl px-3 py-2 mb-8 flex items-center justify-between gap-4">
+                      <textarea
+                        value={postComments}
+                        onChange={handleChanges}
+                        placeholder="Add your comment here..."
+                        className="flex-1 bg-transparent text-sm placeholder:text-gray-500 resize-none outline-none min-h-[24px]"
+                        rows={1}
+                      />
+                      <Button
+                        onClick={handlePostComments}
+                        disabled={!postComments.trim()}
+                        className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-6 h-9 whitespace-nowrap shrink-0"
+                      >
+                        Send
+                      </Button>
+                    </div>
+              {/* <div className="text relative">
                 <Input
                   type="text"
                   name="comment"
@@ -306,7 +276,7 @@ const CommentsDailog = ({
                 >
                   <RiSendPlaneFill className="text-white" size={20} />
                 </button>
-              </div>
+              </div> */}
               {commentsDatas.map((co) => (
                 <div key={co.unique_id}>
                   <div className="flex gap-3 my-5 flex-1">
@@ -365,33 +335,49 @@ const CommentsDailog = ({
                           </span>
                         </Button>
                         {isReply && commentIndex === co.unique_id && (
-                          <div className="text relative w-full">
-                            <Input
-                              type="text"
-                              name="reply"
-                              id="reply"
-                              value={replyComments}
-                              className="h-10 "
-                              placeholder="Add your comment here..."
-                              onChange={handleReplyChanges}
-                            />
-                            <button
-                              onClick={() => {
-                                handleReplyComment(co.unique_id, co.post_id);
-                              }}
-                              className="text absolute right-0 top-0 hover:bg-blue-500 flex justify-center items-center h-full w-12 bg-blue-600 rounded-br-lg rounded-tr-lg"
-                            >
-                              <RiSendPlaneFill
-                                className="text-white"
-                                size={20}
-                              />
-                            </button>
-                          </div>
+                          // <div className="text relative w-full">
+                          //   <Input
+                          //     type="text"
+                          //     name="reply"
+                          //     id="reply"
+                          //     value={replyComments}
+                          //     className="h-10 "
+                          //     placeholder="Add your comment here..."
+                          //     onChange={handleReplyChanges}
+                          //   />
+                          //   <button
+                          //     onClick={() => {
+                          //       handleReplyComment(co.unique_id, post.post_id);
+                          //     }}
+                          //     className="text absolute right-0 top-0 hover:bg-blue-500 flex justify-center items-center h-full w-12 bg-blue-600 rounded-br-lg rounded-tr-lg"
+                          //   >
+                          //     <RiSendPlaneFill
+                          //       className="text-white"
+                          //       size={20}
+                          //     />
+                          //   </button>
+                          // </div>
+                             <div className="bg-gray-100 rounded-3xl px-3 py-2 mb-8 flex items-center justify-between gap-4 w-full">
+                      <textarea
+                        value={replyComments}
+                        onChange={handleReplyChanges}
+                        placeholder="Add your comment here..."
+                        className="flex-1 bg-transparent text-sm placeholder:text-gray-500 resize-none outline-none min-h-[24px]"
+                        rows={1}
+                      />
+                      <Button
+                        onClick={()=>handleReplyComment(co.unique_id, post.post_id)}
+                        disabled={!replyComments.trim()}
+                        className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-6 h-9 whitespace-nowrap shrink-0"
+                      >
+                        Reply
+                      </Button>
+                    </div>
                         )}
                       </div>
                     </div>
                   </div>
-                  {/* {co.length > 0 &&
+                  {co.length > 0 &&
                     co.replies.map((rep) => (
                       <div key={rep.id} className="text ml-10">
                         <div className="flex gap-3 my-5 flex-1">
@@ -447,7 +433,7 @@ const CommentsDailog = ({
                             </div>
                           ))}
                       </div>
-                    ))} */}
+                    ))}
                 </div>
               ))}
             </ScrollArea>

@@ -1,4 +1,7 @@
+"use client";
+
 import { useState } from "react";
+import Image from "next/image";
 import { MoreVertical, MessageCircle, Share2, CreditCard, Ban, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { mockSellerProfile } from "@/lib/mockData";
@@ -9,19 +12,20 @@ export default function UserProfile() {
   const seller = mockSellerProfile;
 
   const tabs = [
-    { id: "posts", label: "Posts" },
-    { id: "community", label: "Community" },
-    { id: "media", label: "Media" },
-  ];
+    { id: "posts" as const, label: "Posts" },
+    { id: "community" as const, label: "Community" },
+    { id: "media" as const, label: "Media" },
+  ] as const;
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       {/* Cover Image */}
       <div className="relative h-48 bg-gradient-to-b from-blue-400 to-blue-600">
-        <img
+        <Image
           src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop"
           alt="cover"
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
         />
 
         {/* Header Actions */}
@@ -37,10 +41,12 @@ export default function UserProfile() {
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
           {/* Avatar and Basic Info */}
           <div className="flex items-start gap-4 mb-6">
-            <img
+            <Image
               src={seller.avatar}
               alt={seller.name}
-              className="w-20 h-20 rounded-full border-4 border-white object-cover"
+              width={80}
+              height={80}
+              className="rounded-full border-4 border-white object-cover"
             />
             <div className="flex-1">
               <h1 className="text-2xl font-bold text-gray-900">{seller.name}</h1>
@@ -105,7 +111,7 @@ export default function UserProfile() {
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id)}
                 className={`flex-1 py-4 font-semibold text-center transition ${
                   activeTab === tab.id
                     ? "text-blue-600 border-b-2 border-blue-600"
@@ -121,15 +127,16 @@ export default function UserProfile() {
           <div className="p-4">
             {activeTab === "posts" && (
               <div className="grid grid-cols-3 gap-2">
-                {seller.posts?.map((post) => (
+                {seller.posts?.map((post, idx) => (
                   <div
-                    key={post.id}
-                    className="aspect-square rounded-lg overflow-hidden bg-gray-200 cursor-pointer hover:opacity-80 transition"
+                    key={post.image || idx}
+                    className="relative aspect-square rounded-lg overflow-hidden bg-gray-200 cursor-pointer hover:opacity-80 transition"
                   >
-                    <img
+                    <Image
                       src={post.image}
-                      alt={`post-${post.id}`}
-                      className="w-full h-full object-cover"
+                      alt={`post-${idx}`}
+                      fill
+                      className="object-cover"
                     />
                   </div>
                 ))}
@@ -155,4 +162,3 @@ export default function UserProfile() {
     </div>
   );
 }
-

@@ -14,7 +14,7 @@ console.log(slug);
 
   return (
     <div>
-        <MainDetailsPage />
+        <MainDetailsPage slug={slug} />
     </div>
   )
 }

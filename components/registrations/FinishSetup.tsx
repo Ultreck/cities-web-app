@@ -24,7 +24,7 @@ import useFormHook from "@/hooks/use-form-hook";
 import { useEffect, useState } from "react";
 import { ChevronLeft, Loader } from "lucide-react";
 import useParamHook from "@/hooks/use-param-hook";
-import clientApi from "@/lib/clientApi";
+import clientApi from "@/apis/clientApi";
 import { toast } from "react-toastify";
 import { SlSettings } from "react-icons/sl";
 import { useRouter } from "next/navigation";

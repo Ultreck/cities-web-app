@@ -1,5 +1,6 @@
 'use client';
 
+import AuthPageWrapper from "@/components/auth/AuthPageWrapper";
 import { Button } from "@/components/ui/button";
 import { User, Building2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -8,11 +9,12 @@ export default function AccountTypeSelection() {
 const router = useRouter();
 
   return (
+    <AuthPageWrapper>
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="max-w-2xl w-full">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Get Started Today
+            Choose account
           </h1>
           <p className="text-lg text-gray-600">
             Choose the account type that best fits your needs
@@ -65,7 +67,7 @@ const router = useRouter();
           </div>
         </div>
 
-        <div className="text-center mt-12">
+        {/* <div className="text-center mt-12">
           <p className="text-gray-600">
             Already have an account?{" "}
             <button
@@ -75,8 +77,9 @@ const router = useRouter();
               Sign in
             </button>
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
+    </AuthPageWrapper>
   );
 }

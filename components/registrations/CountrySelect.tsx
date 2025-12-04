@@ -11,9 +11,16 @@ import {
 import useFormHook from "@/hooks/use-form-hook";
 import { UseFormReturn } from "react-hook-form";
 import CountryFlag from "@/lib/helper";
-import { userSchemaProps } from "./IndividualRegistration";
+import { z } from "zod";
 
-export default function CountrySelect({form}: {form: any}) {
+const resetPasswordSchema = z.object({
+  phone_number: z.string().min(1),
+  country_code: z.string().min(1),
+});
+
+export type ResetPasswordProps = z.infer<typeof resetPasswordSchema>;
+
+export default function CountrySelect({form}: {form: UseFormReturn<ResetPasswordProps>}) {
   const [selected, setSelected] = useState<string>("");
   const { countries } = useFormHook();
 

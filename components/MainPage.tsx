@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -31,6 +30,7 @@ import {
   DollarSign,
   Menu,
   X,
+  type LucideIcon,
 } from "lucide-react";
 import {
   currentUser,
@@ -39,7 +39,6 @@ import {
   initialJobs,
   initialMessages,
   initialNotifications,
-  initialPosts,
   initialProperties,
 } from "@/lib/helper";
 import { SearchBar } from "./SearchBar";
@@ -48,6 +47,10 @@ import { NotificationsPage } from "./pages/NotificationsPage";
 import { MessagesPage } from "./pages/MessagesPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { SettingsPage } from "./pages/SettingsPage";
+import usePostHook from "@/hooks/use-post-hook";
+import { RePostType } from "@/types/type-props";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "@/redux/selectors";
 // import { NotificationsPage } from "./pages/NotificationsPage";
 // import { MessagesPage } from "./pages/MessagesPage";
 // import { ProfilePage } from "./ProfilePage";
@@ -56,48 +59,46 @@ import { SettingsPage } from "./pages/SettingsPage";
 function MainPage() {
   const [activeTab, setActiveTab] = useState("home");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+    const details = useSelector(selectUserDetails);
   // State management
-  const [posts, setPosts] = useState(initialPosts);
+  // const [posts, setPosts] = useState(initialPosts);
+
   const [communities, setCommunities] = useState(initialCommunities);
-  const [notifications, setNotifications] = useState(initialNotifications);
-  const [messages, setMessages] = useState(initialMessages);
+  const [notifications, _setNotifications] = useState(initialNotifications);
+  const [messages, _setMessages] = useState(initialMessages);
+  const { handlePostLikes, handleRepost, posts } = usePostHook();
 
   const unreadNotifications = notifications.filter((n) => !n.read).length;
   const unreadMessages = messages.reduce((sum, msg) => sum + msg.unread, 0);
 
   // Search data - combine all searchable items
-  const searchData = [
-    ...posts.map((p) => ({ ...p, type: "post" })),
-    ...communities.map((c) => ({ ...c, type: "community" })),
-    ...initialJobs.map((j) => ({ ...j, type: "job" })),
-  ];
+  const searchData = [...posts.map((p) => ({ ...p, type: "post" }))];
 
-  const handleSearch = (item: any) => {
+  const handleSearch = (item: { type: string }) => {
     console.log("Selected:", item);
     // Navigate to the appropriate tab based on item type
-    if (item.type === "community") {
-      setActiveTab("community");
-    } else if (item.type === "job") {
-      setActiveTab("forsale");
-    }
+    // if (item.type === "community") {
+    //   setActiveTab("community");
+    // } else if (item.type === "job") {
+    //   setActiveTab("forsale");
+    // }
   };
 
-  const handleLike = (postId: any, liked: boolean) => {
-    setPosts((prev) =>
-      prev.map((post) =>
-        post.id === postId
-          ? {
-              ...post,
-              likedByUser: liked,
-              likes: liked ? post.likes + 1 : post.likes - 1,
-            }
-          : post
-      )
-    );
+  const handleLike = (postId: string, liked: boolean) => {
+    // setPosts((prev) =>
+    //   prev.map((post) =>
+    //     post.id === postId
+    //       ? {
+    //           ...post,
+    //           likedByUser: liked,
+    //           likes: liked ? post.likes + 1 : post.likes - 1,
+    //         }
+    //       : post
+    //   )
+    // );
   };
 
-  const handleJoinCommunity = (communityId: any) => {
+  const handleJoinCommunity = (communityId: string) => {
     setCommunities((prev) =>
       prev.map((comm) =>
         comm.id === communityId ? { ...comm, joined: !comm.joined } : comm
@@ -105,19 +106,15 @@ function MainPage() {
     );
   };
 
-  const NavItem = ({
-    icon: Icon,
-    label,
-    active,
-    onClick,
-    badge,
-  }: {
-    icon: any;
+  interface NavItemProps {
+    icon: LucideIcon;
     label: string;
-    active: any;
-    onClick: any;
-    badge: any;
-  }) => (
+    active: boolean;
+    onClick: () => void;
+    badge?: number;
+  }
+
+  const NavItem = ({ icon: Icon, label, active, onClick, badge }: NavItemProps) => (
     <button
       onClick={onClick}
       className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all relative ${
@@ -127,8 +124,9 @@ function MainPage() {
       }`}
     >
       <Icon className="w-5 h-5" />
+      {/* {icon} */}
       <span className="font-medium hidden lg:inline">{label}</span>
-      {badge > 0 && (
+      {badge !== undefined && badge > 0 && (
         <Badge
           variant="destructive"
           className="absolute top-1 left-8 lg:left-auto lg:right-2 h-5 min-w-5 flex items-center justify-center p-1"
@@ -161,11 +159,11 @@ function MainPage() {
           </div>
 
           <div className="hidden md:flex flex-1 max-w-xl mx-8">
-            <SearchBar
+            {/* <SearchBar
               placeholder="Search communities, posts, people..."
               data={searchData}
               onSearch={handleSearch}
-            />
+            /> */}
           </div>
 
           <div className="flex items-center gap-2">
@@ -223,7 +221,7 @@ function MainPage() {
           >
             <NavItem
               icon={Home}
-              badge={""}
+              badge={0}
               label="Home"
               active={activeTab === "home"}
               onClick={() => {
@@ -232,7 +230,7 @@ function MainPage() {
               }}
             />
             <NavItem
-              badge={""}
+              badge={0}
               icon={Users}
               label="Community"
               active={activeTab === "community"}
@@ -244,7 +242,7 @@ function MainPage() {
             <NavItem
               icon={ShoppingBag}
               label="For Sale"
-              badge={""}
+              badge={0}
               active={activeTab === "forsale"}
               onClick={() => {
                 setActiveTab("forsale");
@@ -252,7 +250,7 @@ function MainPage() {
               }}
             />
             <NavItem
-              badge={""}
+              badge={0}
               icon={Gift}
               label="Rewards"
               active={activeTab === "rewards"}
@@ -284,7 +282,7 @@ function MainPage() {
 
             <div className="pt-6 mt-6 border-t space-y-2">
               <NavItem
-                badge={""}
+                badge={0}
                 icon={User}
                 label="Profile"
                 active={activeTab === "profile"}
@@ -294,7 +292,7 @@ function MainPage() {
                 }}
               />
               <NavItem
-                badge={""}
+                badge={0}
                 icon={Settings}
                 label="Settings"
                 active={activeTab === "settings"}
@@ -314,11 +312,11 @@ function MainPage() {
                 <div className="lg:col-span-2 space-y-4">
                   {/* Mobile Search */}
                   <div className="md:hidden mb-4">
-                    <SearchBar
+                    {/* <SearchBar
                       placeholder="Search..."
                       data={searchData}
                       onSearch={handleSearch}
-                    />
+                    /> */}
                   </div>
 
                   {/* Create Post */}
@@ -339,7 +337,13 @@ function MainPage() {
 
                   {/* Posts Feed */}
                   {posts.map((post) => (
-                    <PostCard key={post.id} post={post} onLike={handleLike} />
+                    <PostCard
+                      key={post.post_id}
+                      handlePostLikes={handlePostLikes}
+                      handleRepost={handleRepost}
+                      post={post}
+                      // onLike={handleLike}
+                    />
                   ))}
                 </div>
 
@@ -687,16 +691,16 @@ function MainPage() {
 
             {/* Notifications Tab */}
             {activeTab === "notifications" && (
-              <NotificationsPage notifications={notifications} />
+              <NotificationsPage  />
             )}
 
             {/* Messages Tab */}
             {activeTab === "messages" && <MessagesPage messages={messages} />}
 
             {/* Profile Tab */}
-            {activeTab === "profile" && (
-              <ProfilePage user={currentUser} posts={posts} />
-            )}
+            {/* {activeTab === "profile" && (
+              <ProfilePage user={details?? {}} posts={posts} />
+            )} */}
 
             {/* Settings Tab */}
             {activeTab === "settings" && <SettingsPage />}

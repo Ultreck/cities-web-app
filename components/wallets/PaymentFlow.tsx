@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeft, CheckCircle, Copy, Check } from "lucide-react";
+import { Copy, Check } from "lucide-react";
 import { useState } from "react";
 import { usePayment } from "./PaymentContext";
 
@@ -48,14 +47,14 @@ const airtimePlans = [
   { amount: 5000, price: 5000 },
 ];
 
-const dataPlans = [
-  { amount: 500, data: "500MB", validity: "7 days" },
-  { amount: 1000, data: "1GB", validity: "7 days" },
-  { amount: 2000, data: "2GB", validity: "30 days" },
-  { amount: 5000, data: "5GB", validity: "30 days" },
-  { amount: 10000, data: "10GB", validity: "30 days" },
-  { amount: 20000, data: "20GB", validity: "30 days" },
-];
+// const dataPlans = [
+//   { amount: 500, data: "500MB", validity: "7 days" },
+//   { amount: 1000, data: "1GB", validity: "7 days" },
+//   { amount: 2000, data: "2GB", validity: "30 days" },
+//   { amount: 5000, data: "5GB", validity: "30 days" },
+//   { amount: 10000, data: "10GB", validity: "30 days" },
+//   { amount: 20000, data: "20GB", validity: "30 days" },
+// ];
 
 const sources = [
   { id: 1, name: "@draddo", icon: "👤" },
@@ -65,8 +64,8 @@ const sources = [
 ];
 
 interface PaymentFlowProps {
-  onClose: () => void;
-  onSuccess: () => void;
+  onClose?: () => void;
+  onSuccess?: () => void;
 }
 
 export function PaymentFlow({ onClose, onSuccess }: PaymentFlowProps) {
@@ -76,22 +75,22 @@ export function PaymentFlow({ onClose, onSuccess }: PaymentFlowProps) {
 
   if (!payment.type) return null;
 
-  const getTitle = () => {
-    switch (payment.type) {
-      case "transfer":
-        return "Transfer to Contact";
-      case "outbound":
-        return "Outbound Transfer";
-      case "inbound":
-        return "Receive Money";
-      case "airtime":
-        return "Buy Airtime";
-      case "data":
-        return "Buy Data";
-      default:
-        return "Payment";
-    }
-  };
+  // const getTitle = () => {
+  //   switch (payment.type) {
+  //     case "transfer":
+  //       return "Transfer to Contact";
+  //     case "outbound":
+  //       return "Outbound Transfer";
+  //     case "inbound":
+  //       return "Receive Money";
+  //     case "airtime":
+  //       return "Buy Airtime";
+  //     case "data":
+  //       return "Buy Data";
+  //     default:
+  //       return "Payment";
+  //   }
+  // };
 
   const getStepCount = () => {
     if (payment.type === "inbound") return 2;
@@ -104,13 +103,13 @@ export function PaymentFlow({ onClose, onSuccess }: PaymentFlowProps) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSuccess = () => {
-    updatePayment({ step: getStepCount() });
-    setTimeout(() => {
-      onSuccess();
-      resetPayment();
-    }, 1500);
-  };
+  // const handleSuccess = () => {
+  //   updatePayment({ step: getStepCount() });
+  //   setTimeout(() => {
+  //     onSuccess();
+  //     resetPayment();
+  //   }, 1500);
+  // };
 
   const renderStep = () => {
     // TRANSFER FLOW
