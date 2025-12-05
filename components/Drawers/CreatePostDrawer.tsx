@@ -42,36 +42,6 @@ export default function CreatePostDrawer({
   const { mutateAsync: createPost, isPending: isCreatingPost } =
     useCreatePostMutation();
 
-  //   const createPostMutation = trpc.posts.create.useMutation({
-  //     onSuccess: () => {
-  //       setContent("");
-  //       setImages([]);
-  //       setPreviewImages([]);
-  //       router.push("/feed");
-  //     },
-  //   });
-
-  // const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const files = e.target.files ? Array.from(e.target.files) : null;
-  //   // setFile(e.target.files?.[0] || null)
-  //   setFile(files);
-  //   if (files) {
-  //     const newPreviews: string[] = [];
-  //     Array.from(files).forEach((file) => {
-  //       const reader = new FileReader();
-  //       reader.onload = (event) => {
-  //         if (event.target?.result) {
-  //           newPreviews.push(event.target.result as string);
-  //           if (newPreviews.length === files.length) {
-  //             setPreviewImages([...previewImages, ...newPreviews]);
-  //           }
-  //         }
-  //       };
-  //       reader.readAsDataURL(file);
-  //     });
-  //   }
-  // };
-
 function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>): void {
   const uploadedFiles = e.currentTarget.files ? Array.from(e.currentTarget.files) : null;
   if (!uploadedFiles) return;
@@ -104,14 +74,13 @@ function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>): void {
   };
 
   const handleSubmit = async () => {
-    console.log(file);
+    console.log(files);
 
     if (!content.trim()) return;
     const formData = new FormData();
     formData.append("content", content);
-    if (file) {
-      // formData.append("media", file);
-      for (const f of file) {
+    if (files) {
+      for (const f of files) {
         formData.append("media", f);
       }
     }

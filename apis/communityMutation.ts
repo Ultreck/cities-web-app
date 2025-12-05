@@ -3,6 +3,10 @@ import clientApi from "./clientApi";
 import { CreateCommunityProps } from "@/components/communities/modals/CreateCommunityModal";
 import { EventCreatingProps } from "@/components/communities/modals/EventCreatingModal";
 import { JobPostingProps } from "@/components/communities/modals/JobPostingModal";
+import axios from "axios";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+ const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
+ const bearerToken =`Bearer ${token}`
 
 
 export const useCreateCommunityMutation = () => {
@@ -122,8 +126,12 @@ export const useCreateRentPropertyMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (payload: FormData) =>
-      clientApi.post('/communities/rent', payload),
+    mutationFn: (payload: FormData) =>{
+      // clientApi.post('/communities/rent', payload)
+            return axios.post(baseUrl+"/communities/rent", payload,{headers:{
+    "Content-Type": "multipart/form-data", "Authorization":bearerToken
+  }});
+    },
 
     onSuccess: (_, payload) => {
       queryClient.invalidateQueries({
